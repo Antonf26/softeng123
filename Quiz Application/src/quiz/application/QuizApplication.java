@@ -8,7 +8,7 @@ package quiz.application;
 
 /**
  *
- * @author Anton
+ * @author Anton smells
  */
 public class QuizApplication {
 
