@@ -10,17 +10,17 @@ import Users.*;
  *
  * @author Anton
  */
-public class QuizRunner {
-    public QuizRunner(Quiz quiz, User user)
+public class QuizResult {
+    public QuizResult(Quiz Quiz, User user)
     {
-        QuizForm qfrm = new QuizForm(quiz, user);
-        //qfrm.setVisible(true);
-        qfrm.setAlwaysOnTop(true);
+        quiz = Quiz;
+    }
+    
+    private Quiz quiz;
+    public void recordAnswer(Question q, Answer a){
         
         
     }
-    private String StudentId;
-    private int currentQuestion;
     
-   
+    
 }

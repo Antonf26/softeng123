@@ -6,6 +6,9 @@
 
 package MainFront;
 import Users.*;
+import QuizRunner.*;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Anton
@@ -32,10 +35,18 @@ public class HomeFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         WelcomeLbl = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         WelcomeLbl.setText("jLabel1");
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -45,17 +56,43 @@ public class HomeFrm extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(WelcomeLbl)
                 .addContainerGap(337, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(125, 125, 125))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(55, 55, 55)
                 .addComponent(WelcomeLbl)
-                .addContainerGap(231, Short.MAX_VALUE))
+                .addGap(96, 96, 96)
+                .addComponent(jButton1)
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Answer[] testans = new Answer[4];
+        int i = 0;
+        while (i <= 3)
+        {
+            testans[i] = new Answer("aa", false);
+            i++;
+        }
+        Question q = new Question("What's the first letter repeated?", testans);
+        List<Question> quests  = new ArrayList<Question>();
+        Question q1 = new Question("Fuck fuck fuck fuck", testans);
+        quests.add(q);
+        quests.add(q1);
+        Quiz qz = new Quiz(quests);
+        QuizRunner qr = new QuizRunner(qz, new User(1, "Test"));
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -95,5 +132,6 @@ public class HomeFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel WelcomeLbl;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

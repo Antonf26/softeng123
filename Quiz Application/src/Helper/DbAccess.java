@@ -40,7 +40,7 @@ catch (SQLException se)
     try
     {
         
-        String query = String.format("SELECT * FROM APPUSERS WHERE USERNAME = '%s' AND PASSWORD = '%s'", username, password);
+        String query = String.format("SELECT * FROM APPUSERS WHERE USERNAME = '%s' AND PASSWORD  ='%s'", username, password);
         
         int utype = 0;
         ResultSet rs = getQueryResults(query);
@@ -48,6 +48,7 @@ catch (SQLException se)
                 {
                     utype = rs.getInt("USERTYPE");
                 }
+        //con.close(); //might need to close the connection at another point, doing it here throws and excepction with the resultset.
         return utype;
     }
     catch (SQLException se)
@@ -55,11 +56,14 @@ catch (SQLException se)
             return -1;
             }
 }
+    
+    
     private static ResultSet getQueryResults(String query) throws SQLException
     {
         getConnection();
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery(query);
+        //con.close();
         return rs;
     }
     public static Connection con;

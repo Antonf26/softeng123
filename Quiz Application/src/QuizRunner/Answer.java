@@ -6,19 +6,17 @@
 
 package QuizRunner;
 
-import java.util.List;
-
 /**
  *
  * @author Anton
  */
-public class Quiz {
-    public Quiz(List<Question> QuestionList)
+public class Answer {
+    public Answer(String AnswerText, boolean IsCorrect)
     {
-        questionList = QuestionList;
+        answerText = AnswerText;
+        isCorrect = IsCorrect;
     }
-    public List<Question> questionList;
-    public double timeLimit;
-    
+    public String answerText;
+    public boolean isCorrect;
     
 }
