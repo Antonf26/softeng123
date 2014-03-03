@@ -6,19 +6,30 @@
 
 package QuizRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Anton
  */
 public class Question {
-    public Question(String QuestionText, Answer[] Answers)
+    public Question (String QuestionText)
+    {
+        questionText = QuestionText;
+        answers = new ArrayList<Answer>();
+        
+    }
+    public Question(String QuestionText, List<Answer> Answers, int CorrectIndex)
     {
         questionText = QuestionText;
         answers = Answers;
         isValidated = true;
-        
+        correctIndex = CorrectIndex;  
     }
     public String questionText;
-    public Answer[] answers;
+    public List<Answer> answers;
     public boolean isValidated;
+    public int correctIndex;
+    
 }

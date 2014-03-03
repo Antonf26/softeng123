@@ -5,6 +5,7 @@
  */
 
 package MainFront;
+import Helper.DbAccess;
 import Users.*;
 import QuizRunner.*;
 import java.util.ArrayList;
@@ -83,12 +84,16 @@ public class HomeFrm extends javax.swing.JFrame {
             testans[i] = new Answer("aa", false);
             i++;
         }
-        Question q = new Question("What's the first letter repeated?", testans);
-        List<Question> quests  = new ArrayList<Question>();
-        Question q1 = new Question("Fuck fuck fuck fuck", testans);
-        quests.add(q);
-        quests.add(q1);
-        Quiz qz = new Quiz(quests);
+        
+        
+//        Question q = new Question("What's the first letter repeated?", testans, 0);
+//        List<Question> quests  = new ArrayList<Question>();
+//        Question q1 = new Question("Blah blabhah balhaha", testans, 0);
+//        quests.add(q);
+//        quests.add(q1);
+//        Quiz qz = new Quiz(quests);
+        Quiz qz = DbAccess.getQuizzes()[0];
+        qz.questionList = DbAccess.getQuizData(qz.dbId);
         QuizRunner qr = new QuizRunner(qz, new User(1, "Test"));
         
         

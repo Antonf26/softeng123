@@ -7,6 +7,10 @@
 package QuizRunner;
 import Users.*;
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import javax.swing.ButtonModel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 /**
@@ -22,13 +26,16 @@ public class QuizForm extends javax.swing.JFrame {
         quiz = Quiz;
         initComponents();
         qIndex = 0;
+        answersSelected = new int[Quiz.questionList.size()];
+        Arrays.fill(answersSelected, -1);
         ShowQuestion(qIndex);
         setVisible(true);
+        
         
             }
     private Quiz quiz;
     private int qIndex;
-
+    private int[] answersSelected;
     private QuizForm() {
         initComponents();
     }
@@ -48,6 +55,7 @@ public class QuizForm extends javax.swing.JFrame {
         qnumLbl = new javax.swing.JLabel();
         nextQBtn = new javax.swing.JButton();
         QuestionPanel = new javax.swing.JPanel();
+        prevQbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,6 +81,13 @@ public class QuizForm extends javax.swing.JFrame {
             .addGap(0, 305, Short.MAX_VALUE)
         );
 
+        prevQbtn.setText("jButton1");
+        prevQbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prevQbtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -86,7 +101,9 @@ public class QuizForm extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 523, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 440, Short.MAX_VALUE)
+                        .addComponent(prevQbtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(nextQBtn)
                         .addGap(27, 27, 27))
                     .addGroup(layout.createSequentialGroup()
@@ -107,7 +124,9 @@ public class QuizForm extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addComponent(QuestionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
-                .addComponent(nextQBtn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nextQBtn)
+                    .addComponent(prevQbtn))
                 .addGap(31, 31, 31))
         );
 
@@ -116,12 +135,36 @@ public class QuizForm extends javax.swing.JFrame {
 
     private void nextQBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextQBtnActionPerformed
         //store response!
+     setResponse();
+        //Show next question
         if (qIndex < quiz.questionList.size() - 1)
         {
             qIndex++;
             ShowQuestion(qIndex);
         }
+        
+        
     }//GEN-LAST:event_nextQBtnActionPerformed
+    private void setResponse()
+    {
+        try{
+        ButtonModel bm = AnswerButtons.getSelection();
+        String selectedind = bm.getActionCommand();
+        answersSelected[qIndex] = Integer.parseInt(selectedind);  
+        }
+        catch (NullPointerException npe)
+        {
+            System.out.printf("no selection");
+        }
+    }
+    private void prevQbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevQbtnActionPerformed
+        setResponse();
+        if(qIndex > 0)
+        {
+            ShowQuestion(qIndex - 1);
+            qIndex--;
+        }
+    }//GEN-LAST:event_prevQbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -164,6 +207,7 @@ public class QuizForm extends javax.swing.JFrame {
     private javax.swing.JLabel TimeLbl;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton nextQBtn;
+    private javax.swing.JButton prevQbtn;
     private javax.swing.JLabel qnumLbl;
     // End of variables declaration//GEN-END:variables
 /**
@@ -174,24 +218,42 @@ public class QuizForm extends javax.swing.JFrame {
         
         Question cq = quiz.questionList.get(i);
         QuestionPanel.removeAll();
+        AnswerButtons.clearSelection();
         JLabel qtextLbl = new JLabel(cq.questionText);
         qtextLbl.setSize(qtextLbl.getPreferredSize());
         int ypos = 20;
         qtextLbl.setLocation(0, ypos);
         QuestionPanel.add(qtextLbl);
+        int ind = 0;
+        int selected = answersSelected[i]; //get if the question's been answered before
         for (Answer a : cq.answers)
         {
             ypos += 20;
             JRadioButton jrb = new JRadioButton(a.answerText);
             jrb.setSize(jrb.getPreferredSize());
             jrb.setLocation(0, ypos);
+            jrb.getModel().setActionCommand(Integer.toString(ind)); //this is how we can tell which answer was picked
+           
             AnswerButtons.add(jrb);
             QuestionPanel.add(jrb);
+             if(selected == ind)
+            {
+                jrb.setSelected(true);
+            }
+            ind++;
         }
         QuestionPanel.setVisible(true);
-        QuestionPanel.setBackground(Color.red);
         QuestionPanel.repaint();
         setVisible(true);
+        TimeLbl.setText("Question " + Integer.toString(i + 1) + " of " + quiz.questionList.size());
+        if(i==0)
+        {
+            prevQbtn.setEnabled(false);
+        }
+        else
+        {
+            prevQbtn.setEnabled(true);
+        }
         
         
     }
