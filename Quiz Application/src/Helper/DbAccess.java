@@ -15,8 +15,10 @@ import java.sql.*;
  * @author Anton
  */
 import QuizRunner.*;
+import Users.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 public class DbAccess {
  
     public static  void getConnection()
@@ -39,24 +41,25 @@ catch (SQLException se)
 
         
     }
-    public static int GetUser(String username, String password){
+    public static int[] GetUser(String username, String password){
     try
     {
         
         String query = String.format("SELECT * FROM APPUSERS WHERE USERNAME = '%s' AND PASSWORD  ='%s'", username, password);
         
-        int utype = 0;
+        int[] udetails = new int[2];
         ResultSet rs = getQueryResults(query);
         while (rs.next())
                 {
-                    utype = rs.getInt("USERTYPE");
+                    udetails[0] = rs.getInt("USERTYPE");
+                    udetails[1] = rs.getInt("USERID");
                 }
         //con.close(); //might need to close the connection at another point, doing it here throws and excepction with the resultset.
-        return utype;
+        return udetails;
     }
     catch (SQLException se)
             {
-            return -1;
+            return new int[]{-1,-1};
             }
     finally
     {
@@ -76,6 +79,7 @@ catch (SQLException se)
         {
             Quiz q = new Quiz(rs.getString("QUIZTITLE"), rs.getInt("QUIZID"));
             q.dbId  = rs.getInt("QUIZID");
+            q.timeLimit = rs.getInt("TimeAllowed");
             quizzes.add(q);
         }
         return quizzes.toArray(new Quiz[quizzes.size()]);
@@ -106,21 +110,27 @@ catch (SQLException se)
                 if (lastqid == 0)
                 {
                     q = new Question(rs.getString("QuestionText"));
-                    q.answers.add(new Answer(rs.getString("AnswerText"), rs.getBoolean("IsCorrect")));
+                    q.dbId = rs.getInt("QuestionID");
+                    Answer a = new Answer(rs.getString("AnswerText"), rs.getBoolean("IsCorrect"));
+                    a.dbId = rs.getInt("AnswerID");
+                    q.answers.add(a);
                 }
                 else if (lastqid == currqid)
                 {
-                   q.answers.add(new Answer(rs.getString("AnswerText"), rs.getBoolean("IsCorrect")));
+                    Answer a = new Answer(rs.getString("AnswerText"), rs.getBoolean("IsCorrect"));
+                    a.dbId = rs.getInt("AnswerID");
+                    q.answers.add(a);
                 }
                 else
                 {
                     questions.add(q);
                     q = new Question(rs.getString("QuestionText"));
-                    q.answers.add(new Answer(rs.getString("AnswerText"), rs.getBoolean("IsCorrect")));
+                    q.dbId = rs.getInt("QuestionID");
+                    Answer a = new Answer(rs.getString("AnswerText"), rs.getBoolean("IsCorrect"));
+                    a.dbId = rs.getInt("AnswerID");
+                    q.answers.add(a);
                 }
-                lastqid = currqid;
-                
-                    
+                lastqid = currqid; 
             }
             questions.add(q);
             return questions;
@@ -140,5 +150,34 @@ catch (SQLException se)
         //con.close();
         return rs;
     }
+    private static Boolean runStatement(String statement) 
+    {
+        try
+        {
+            getConnection();
+            PreparedStatement st = con.prepareStatement(statement);
+            st.executeUpdate();
+            return true;
+            
+        }
+        catch (SQLException ex)
+        {
+            System.out.print(ex.getMessage());
+            return false; //something went wrong, will need to be handled!
+        }
+    }
     public static Connection con;
+
+    public static Boolean saveResults(int QuizId, Map<Integer, Integer> selectedAnswers, int UserId) {
+       String Statement = "INSERT INTO QUIZRESULT (QUIZID, QUESTIONID, USERID, ANSWERID) VALUES";
+       for (Map.Entry<Integer, Integer> answerpair : selectedAnswers.entrySet())
+       {
+           String valstring = String.format("(%d, %d, %d, %d),", QuizId, answerpair.getKey(), UserId, answerpair.getValue());
+           Statement+= valstring;
+       }
+       Statement = Statement.substring(0, Statement.length()-1); //cutting of last comma;
+       Boolean Success = runStatement(Statement);
+       return Success;
+               
+    }
 }

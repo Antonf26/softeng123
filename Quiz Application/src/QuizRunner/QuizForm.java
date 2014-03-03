@@ -5,10 +5,13 @@
  */
 
 package QuizRunner;
+import Helper.DbAccess;
 import Users.*;
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.ButtonModel;
 import javax.swing.JLabel;
@@ -30,12 +33,16 @@ public class QuizForm extends javax.swing.JFrame {
         Arrays.fill(answersSelected, -1);
         ShowQuestion(qIndex);
         setVisible(true);
+        user = User;
         
         
             }
     private Quiz quiz;
     private int qIndex;
+    private User user;
     private int[] answersSelected;
+    private Map<Integer, Integer> selectedAnswers = new HashMap<Integer, Integer>();
+    
     private QuizForm() {
         initComponents();
     }
@@ -142,6 +149,10 @@ public class QuizForm extends javax.swing.JFrame {
             qIndex++;
             ShowQuestion(qIndex);
         }
+        else
+        {
+            saveResults();
+        }
         
         
     }//GEN-LAST:event_nextQBtnActionPerformed
@@ -150,11 +161,12 @@ public class QuizForm extends javax.swing.JFrame {
         try{
         ButtonModel bm = AnswerButtons.getSelection();
         String selectedind = bm.getActionCommand();
-        answersSelected[qIndex] = Integer.parseInt(selectedind);  
+        
+        selectedAnswers.put(quiz.questionList.get(qIndex).dbId, Integer.parseInt(selectedind));
         }
         catch (NullPointerException npe)
         {
-            System.out.printf("no selection");
+            //If no answer was selected, this gets thrown!! Catching it stops it breaking really.
         }
     }
     private void prevQbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevQbtnActionPerformed
@@ -225,18 +237,23 @@ public class QuizForm extends javax.swing.JFrame {
         qtextLbl.setLocation(0, ypos);
         QuestionPanel.add(qtextLbl);
         int ind = 0;
-        int selected = answersSelected[i]; //get if the question's been answered before
+        int selected = 0;
+        if (selectedAnswers.containsKey(cq.dbId))
+        {
+            selected = selectedAnswers.get(cq.dbId);
+        }
+        
         for (Answer a : cq.answers)
         {
             ypos += 20;
             JRadioButton jrb = new JRadioButton(a.answerText);
             jrb.setSize(jrb.getPreferredSize());
             jrb.setLocation(0, ypos);
-            jrb.getModel().setActionCommand(Integer.toString(ind)); //this is how we can tell which answer was picked
+            jrb.getModel().setActionCommand(Integer.toString(a.dbId)); //this is how we can tell which answer was picked
            
             AnswerButtons.add(jrb);
             QuestionPanel.add(jrb);
-             if(selected == ind)
+             if(selected == a.dbId)
             {
                 jrb.setSelected(true);
             }
@@ -257,4 +274,14 @@ public class QuizForm extends javax.swing.JFrame {
         
         
     }
+
+    private void saveResults() {
+        
+        Boolean saved = DbAccess.saveResults(quiz.dbId, selectedAnswers, user.dbId);
+        if (saved)
+        {
+            QuestionPanel.setBackground(Color.green);
+        }
+    }
+    
 }

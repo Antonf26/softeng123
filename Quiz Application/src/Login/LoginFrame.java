@@ -115,11 +115,12 @@ public class LoginFrame extends javax.swing.JFrame {
        String uName = unameField.getText();
        char[] pwd = pwdField.getPassword();
        String pwds = new String(pwd);
-       int uType = DbAccess.GetUser(uName, pwds);
+       int[] uDetails = DbAccess.GetUser(uName, pwds);
        //pwdField.setText(Integer.toString(uType));
-       if(uType > 0)
+       if(uDetails[0] > 0)
        {
-           User usr = new User(uType, uName);
+           User usr = new User(uDetails[0], uName);
+           usr.dbId = uDetails[1];
            HomeFrm hf = new HomeFrm(usr);
            hf.setVisible(true);
            this.setVisible(false);

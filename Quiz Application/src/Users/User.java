@@ -19,5 +19,6 @@ public class User {
     public String userName;
     public UserType utype;
     public enum UserType{Student, Lecturer, ModuleLeader};
+    public int dbId;
     
 }

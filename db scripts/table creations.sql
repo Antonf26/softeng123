@@ -39,11 +39,13 @@ QuestionID int,
 AnswerID int,
 AnswerText varchar(255),
 IsCorrect boolean,
-PRIMARY KEY (QuestionID, AnswerID),
+PRIMARY KEY (QuestionID, AnswerID, USERID),
 CONSTRAINT QAFK FOREIGN KEY (QuestionID) 
 REFERENCES Question (QuestionID)
 
 );
+
+drop table questionanswer
 
 CREATE TABLE QUIZRESULT
 (

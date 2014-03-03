@@ -31,5 +31,6 @@ public class Question {
     public List<Answer> answers;
     public boolean isValidated;
     public int correctIndex;
+    public int dbId;
     
 }

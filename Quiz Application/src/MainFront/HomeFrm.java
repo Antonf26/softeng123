@@ -94,7 +94,7 @@ public class HomeFrm extends javax.swing.JFrame {
 //        Quiz qz = new Quiz(quests);
         Quiz qz = DbAccess.getQuizzes()[0];
         qz.questionList = DbAccess.getQuizData(qz.dbId);
-        QuizRunner qr = new QuizRunner(qz, new User(1, "Test"));
+        QuizRunner qr = new QuizRunner(qz, usr);
         
         
     }//GEN-LAST:event_jButton1ActionPerformed

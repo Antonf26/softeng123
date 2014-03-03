@@ -15,8 +15,16 @@ public class Answer {
     {
         answerText = AnswerText;
         isCorrect = IsCorrect;
+        dbId = 0;
+    }
+    public Answer(String AnswerText, boolean IsCorrect, int DbId)
+    {
+        answerText = AnswerText;
+        isCorrect = IsCorrect;
+        dbId = DbId;
     }
     public String answerText;
     public boolean isCorrect;
+    public int dbId;
     
 }
