@@ -8,6 +8,9 @@ package QuizRunner;
 import Helper.DbAccess;
 import Users.*;
 import java.awt.Color;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +19,7 @@ import java.util.Set;
 import javax.swing.ButtonModel;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.Timer;
 /**
  *
  * @author Anton
@@ -30,10 +34,14 @@ public class QuizForm extends javax.swing.JFrame {
         initComponents();
         qIndex = 0;
         answersSelected = new int[Quiz.questionList.size()];
+        quiztimer = new Timer(1000, timerHit);
         Arrays.fill(answersSelected, -1);
         ShowQuestion(qIndex);
         setVisible(true);
         user = User;
+        timeLeft = Quiz.timeLimit * 60;
+        this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setUndecorated(true);
         
         
             }
@@ -41,8 +49,9 @@ public class QuizForm extends javax.swing.JFrame {
     private int qIndex;
     private User user;
     private int[] answersSelected;
+    private int timeLeft;
     private Map<Integer, Integer> selectedAnswers = new HashMap<Integer, Integer>();
-    
+    Timer quiztimer;
     private QuizForm() {
         initComponents();
     }
@@ -143,6 +152,7 @@ public class QuizForm extends javax.swing.JFrame {
     private void nextQBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextQBtnActionPerformed
         //store response!
      setResponse();
+     
         //Show next question
         if (qIndex < quiz.questionList.size() - 1)
         {
@@ -156,6 +166,28 @@ public class QuizForm extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_nextQBtnActionPerformed
+    private void startTimer()
+    {
+        
+        quiztimer.start();
+        
+    }
+    ActionListener timerHit = new ActionListener(){
+        public void actionPerformed(ActionEvent evt){
+            timeLeft -= 1;
+            String timestring = String.format("%d : %d", timeLeft /60, timeLeft %60);
+            TimeLbl.setText(timestring);
+            if (timeLeft == 0)
+            {
+                quiztimer.stop();
+                performTimeOut();
+            }
+    }
+
+        private void performTimeOut() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    };
     private void setResponse()
     {
         try{
@@ -261,8 +293,12 @@ public class QuizForm extends javax.swing.JFrame {
         }
         QuestionPanel.setVisible(true);
         QuestionPanel.repaint();
-        setVisible(true);
-        TimeLbl.setText("Question " + Integer.toString(i + 1) + " of " + quiz.questionList.size());
+        //setVisible(true);
+        qnumLbl.setText("Question " + Integer.toString(i + 1) + " of " + quiz.questionList.size());
+        if(!quiztimer.isRunning())
+        {
+            startTimer();
+        }
         if(i==0)
         {
             prevQbtn.setEnabled(false);

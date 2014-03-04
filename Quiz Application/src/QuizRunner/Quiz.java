@@ -28,7 +28,7 @@ public class Quiz {
         quizDBId = QuizDbId;
     }
     public List<Question> questionList;
-    public double timeLimit;
+    public int timeLimit;
     public String quizTitle; 
     private int quizDBId;
     
