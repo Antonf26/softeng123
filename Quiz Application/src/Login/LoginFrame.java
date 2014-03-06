@@ -21,6 +21,11 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public LoginFrame() {
         initComponents();
+        uNameLbl.setLabelFor(unameField);
+        pwdLbl.setLabelFor(pwdField);
+        uNameLbl.setDisplayedMnemonic('U');
+        pwdLbl.setDisplayedMnemonic('P');
+        
        
     }
 
@@ -35,8 +40,8 @@ public class LoginFrame extends javax.swing.JFrame {
 
         unameField = new javax.swing.JTextField();
         loginBtn = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        uNameLbl = new javax.swing.JLabel();
+        pwdLbl = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         pwdField = new javax.swing.JPasswordField();
         errorLbl = new javax.swing.JLabel();
@@ -52,9 +57,9 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Username:");
+        uNameLbl.setText("Username:");
 
-        jLabel2.setText("Password:");
+        pwdLbl.setText("Password:");
 
         jLabel3.setText("Please Login to Continue");
 
@@ -70,8 +75,8 @@ public class LoginFrame extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
+                                    .addComponent(uNameLbl)
+                                    .addComponent(pwdLbl))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(unameField)
@@ -97,10 +102,10 @@ public class LoginFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(unameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
+                            .addComponent(uNameLbl))
                         .addGap(26, 26, 26))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
+                        .addComponent(pwdLbl)
                         .addComponent(pwdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(errorLbl)
@@ -172,11 +177,11 @@ public class LoginFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel errorLbl;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JButton loginBtn;
     private javax.swing.JPasswordField pwdField;
+    private javax.swing.JLabel pwdLbl;
+    private javax.swing.JLabel uNameLbl;
     private javax.swing.JTextField unameField;
     // End of variables declaration//GEN-END:variables
 }
