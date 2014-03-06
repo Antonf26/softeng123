@@ -11,6 +11,10 @@ package Users;
  * @author Anton
  */
 public class Student extends User{
+
+    public Student(int Utype, String UserName) {
+        super(Utype, UserName);
+    }
     private enum UserType {STUDENT, LECTURER, MODULELEADER};
     }
 

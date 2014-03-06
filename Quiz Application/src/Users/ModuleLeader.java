@@ -11,5 +11,9 @@ package Users;
  * @author Anton
  */
 public class ModuleLeader extends Lecturer {
+
+    public ModuleLeader(int Utype, String UserName) {
+        super(Utype, UserName);
+    }
     
 }

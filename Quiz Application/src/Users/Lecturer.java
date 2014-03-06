@@ -11,5 +11,9 @@ package Users;
  * @author Anton
  */
 public class Lecturer extends User {
+
+    public Lecturer(int Utype, String UserName) {
+        super(Utype, UserName);
+    }
     
 }
