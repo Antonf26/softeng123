@@ -108,21 +108,16 @@ public class HomeFrm extends javax.swing.JFrame {
 //        quests.add(q1);
 //        Quiz qz = new Quiz(quests);
         Quiz qz = DbAccess.getQuizzes()[0];
-        qz.questionList = DbAccess.getQuizData(qz.dbId);
+        qz.questionList = DbAccess.getQuizQuestions(qz.quizDBId);
         QuizRunner qr = new QuizRunner(qz, usr);
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
 //TESTING DB METHODS, REMOVE ME!
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-          Question Q = new Question("Is the the real life?");
-          Q.AuthorId = 1;
-          Q.isValidated = true;
-          Q.answers.add(new Answer("Bla bla ", false));
-          Q.answers.add(new Answer("Nope, Fantasy!", true));
-          Q.dbId = DbAccess.StoreNewQuestion(Q);
-          boolean valsuccess = DbAccess.ToggleQuestionValidation(Q.dbId, false);
-          
+         Quiz qz = new Quiz("TesterQuiz");
+         qz.quizDBId = DbAccess.CreateQuiz(qz);
+         System.out.print(String.valueOf(qz.quizDBId));    
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

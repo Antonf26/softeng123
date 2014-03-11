@@ -14,6 +14,11 @@ import java.util.List;
  * @author Anton
  */
 public class Question {
+    
+    public Question()
+    {
+        answers = new ArrayList<Answer>();
+    }
     public Question (String QuestionText)
     {
         questionText = QuestionText;
@@ -25,12 +30,10 @@ public class Question {
         questionText = QuestionText;
         answers = Answers;
         isValidated = true;
-        correctIndex = CorrectIndex;  
     }
     public String questionText;
     public List<Answer> answers;
     public boolean isValidated;
-    public int correctIndex;
     public int dbId;
     public int AuthorId;
     

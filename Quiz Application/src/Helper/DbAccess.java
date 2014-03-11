@@ -32,6 +32,7 @@ try
 
         Class.forName("org.apache.derby.jdbc.ClientDriver");
         con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizAppDb", "test", "test");
+        con.setAutoCommit(true);
 }
 catch (ClassNotFoundException ce)
 {
@@ -75,14 +76,19 @@ catch (SQLException se)
     public static Quiz[] getQuizzes()
     {
         try {
-        String query = String.format("SELECT * FROM QUIZ WHERE AVAILABLE = %s", "TRUE");
+        String query = String.format("SELECT * FROM QUIZ");
         ResultSet rs = getQueryResults(query);
         List<Quiz> quizzes = new ArrayList<Quiz>();
         while (rs.next())
         {
             Quiz q = new Quiz(rs.getString("QUIZTITLE"), rs.getInt("QUIZID"));
-            q.dbId  = rs.getInt("QUIZID");
             q.timeLimit = rs.getInt("TimeAllowed");
+            q.available = rs.getBoolean("Available");
+            q.feedbackAvailable = rs.getBoolean("FeedbackAvailable");
+            q.timeOutBehaviour = rs.getInt("TimeOutBehaviour");
+            q.showPracticeQuestion = rs.getBoolean("ShowPracticeQuestion");
+            q.navigationEnabled = rs.getBoolean("NAVIGATIONENABLED");
+            q.randomiseQuestions = rs.getBoolean("RANDOMISEQUESTIONS");
             quizzes.add(q);
         }
         return quizzes.toArray(new Quiz[quizzes.size()]);
@@ -93,7 +99,7 @@ catch (SQLException se)
                 }
         
     }
-    public static List<Question> getQuizData(int QuizDbId)
+    public static List<Question> getQuizQuestions(int QuizDbId)
     {
         try
         {
@@ -169,6 +175,30 @@ catch (SQLException se)
             return false; //something went wrong, will need to be handled!
         }
     }
+    private static Boolean runStatementBatch(List<String> statements)
+    {
+        try
+        {
+           getConnection();
+           Statement stmt = con.createStatement();
+           con.setAutoCommit(false);
+           for (String statement :statements)
+           {
+               stmt.addBatch(statement);
+           }
+           stmt.executeBatch();
+           con.commit();
+           return true;
+           
+           
+        }
+        catch (SQLException ex)
+        {
+            System.out.print(ex.getMessage());
+            return false; //something went wrong, will need to be handled!
+        }
+        
+    }
     private static int runStatementGetID(String statement)
     {
         try
@@ -189,6 +219,7 @@ catch (SQLException se)
             return 0;
         }
     }
+    
     public static Connection con;
 
     public static Boolean saveResults(int QuizId, Map<Integer, Integer> selectedAnswers, int UserId) {
@@ -217,6 +248,26 @@ catch (SQLException se)
         String statement = String.format("Update question set isValidated = %s where QuestionID = %d", isValid ? "TRUE" : "FALSE", QDbId);
         return runStatement(statement);
     }
+    public static Boolean UpdateQuestion(Question QuestionToUpdate)
+    {
+        List<String> statements = new ArrayList<String>();
+        statements.add(String.format("Update Question Set QuestionText = '%s', isValidated = %s where QuestionId = %d", QuestionToUpdate.questionText, QuestionToUpdate.isValidated? "TRUE" : "FALSE", QuestionToUpdate.dbId));
+
+        for (Answer A : QuestionToUpdate.answers)
+        {
+            if (A.dbId == 0)
+            {
+              statements.add (String.format("insert into questionanswer (QuestionId, AnswerId, AnswerText, IsCorrect)values "
+                      + "(%d, ((select max(AnswerId) from questionanswer where questionid = %d) + 1), '%s', %s)", QuestionToUpdate.dbId, QuestionToUpdate.dbId, A.answerText, A.isCorrect? "TRUE" : "FALSE"));
+            }
+            else 
+            {
+              statements.add(String.format ("update questionanswer set AnswerText = '%s', IsCorrect = %s where QuestionId = %d and AnswerID = %d", A.answerText, A.isCorrect? "TRUE" : "FALSE", QuestionToUpdate.dbId, A.dbId ));
+            }
+        }
+        return runStatementBatch(statements);
+    }
+   
     
     public static int StoreNewQuestion(Question QuestionToStore)
     {
@@ -245,5 +296,69 @@ catch (SQLException se)
                 {
                     return 0;
                 }
+    }
+    
+    public static int CreateQuiz(Quiz NewQuiz)
+    {
+     
+            String statement = String.format("INSERT INTO QUIZ (QUIZTITLE, AVAILABLE, SHOWPRACTICEQUESTION,"
+                    + "NAVIGATIONENABLED, TIMEALLOWED, FEEDBACKAVAILABLE, RANDOMISEQUESTIONS, TIMEOUTBEHAVIOUR)"
+                    + "VALUES('%s', %s, %s, %s, %d, %s, %s, %d)", NewQuiz.quizTitle, String.valueOf(NewQuiz.available),
+                    String.valueOf(NewQuiz.showPracticeQuestion), String.valueOf(NewQuiz.navigationEnabled), 
+                    NewQuiz.timeLimit, String.valueOf(NewQuiz.feedbackAvailable), String.valueOf(NewQuiz.randomiseQuestions), 
+                    NewQuiz.timeOutBehaviour);
+            int QuizId = runStatementGetID(statement);
+            return QuizId;
+ 
+    }
+    public static boolean ToggleQuizQuestionLink(int QuizId, int QuestionId, boolean Link)
+    {
+        String statement;
+        if (Link)
+        {
+            statement = String.format("Insert into quizquestion values (%d, %d)", QuizId, QuestionId);
+        }
+        else
+        {
+            statement = String.format("Delete from quizquestion where questionid = %d and quizid = %d", QuestionId, QuizId);
+        }
+        return runStatement(statement);           
+    }
+    public static Question getQuestionData(int QDbId)
+    {
+        try 
+        {
+        Question q = new Question();
+        String qstatement = String.format("Select * from question where questionid = %d", QDbId);
+        ResultSet qrs = getQueryResults(qstatement);
+        if (qrs.next())
+        {
+          q.questionText = qrs.getString("QuestionText");
+          q.dbId = qrs.getInt("QuestionID");
+          q.AuthorId = qrs.getInt("AuthorID");
+          q.isValidated = qrs.getBoolean("ISVALIDATED");
+        }
+        
+        String astatement = String.format("Select * from questionanswer where questionid = %d", QDbId);
+        ResultSet ars = getQueryResults(astatement);
+        while(ars.next())
+        {
+            String atext = ars.getString("ANSWERTEXT");
+            boolean IsCorrect = ars.getBoolean("ISCORRECT");
+            int AnswerId = ars.getInt("ANSWERID");
+            q.answers.add(new Answer(atext, IsCorrect, AnswerId));
+        }
+        return q;
+        
+        }
+        catch (SQLException ex)
+        {
+            return null;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        
     }
 }

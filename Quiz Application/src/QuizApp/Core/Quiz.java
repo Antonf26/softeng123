@@ -15,23 +15,41 @@ import java.util.List;
  * @author Anton
  */
 public class Quiz {
-    public int dbId;
+    public Quiz(String QuizTitle)
+    {
+        this(QuizTitle, 0);
+    }
+    
+    
     public Quiz(String QuizTitle, int QuizDbId)
     {
-        quizTitle = QuizTitle;
-        questionList = new ArrayList<Question>();
-        quizDBId = QuizDbId;
+        this(QuizTitle, new ArrayList<Question>(), QuizDbId);
     }
     public Quiz(String QuizTitle, List<Question> QuestionList, int QuizDbId)
     {
         quizTitle = QuizTitle;
         questionList = QuestionList;
         quizDBId = QuizDbId;
+        //SETTING THE BELOW HERE JUST SO THE PROPERTIES ARE INITIALISED, MAY NEED TO CREATE ANOTHER CONSTRUCTOR/RETHINK THEM.
+        timeLimit = 30;
+        available = true; 
+        feedbackAvailable = true;
+        navigationEnabled = true;
+        showPracticeQuestion = true;
+        randomiseQuestions = true;
+        timeOutBehaviour = 0;
+        
     }
     public List<Question> questionList;
     public int timeLimit;
     public String quizTitle; 
-    private int quizDBId;
+    public int quizDBId;
+    public boolean feedbackAvailable;
+    public boolean navigationEnabled;
+    public boolean showPracticeQuestion;
+    public boolean available;
+    public boolean randomiseQuestions;
+    public int timeOutBehaviour; 
     
     public int getQuizLength()
     {
