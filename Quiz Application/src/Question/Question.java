@@ -10,7 +10,7 @@ package Question;
  *
  * @author Gareth
  */
-import QuizRunner.Answer;
+import QuizApp.Core.Answer;
 import java.util.ArrayList;
 import java.util.List;
 

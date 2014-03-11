@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 
-package QuizRunner;
+package QuizApp.Core;
+import QuizApp.Core.Quiz;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
 import Users.*;
 /**
  *

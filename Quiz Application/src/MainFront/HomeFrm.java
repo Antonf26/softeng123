@@ -5,6 +5,9 @@
  */
 
 package MainFront;
+import QuizApp.Core.Quiz;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
 import Helper.DbAccess;
 import Users.*;
 import QuizRunner.*;
@@ -37,6 +40,7 @@ public class HomeFrm extends javax.swing.JFrame {
 
         WelcomeLbl = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +50,13 @@ public class HomeFrm extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -59,7 +70,9 @@ public class HomeFrm extends javax.swing.JFrame {
                 .addContainerGap(337, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
                 .addGap(125, 125, 125))
         );
         layout.setVerticalGroup(
@@ -69,7 +82,9 @@ public class HomeFrm extends javax.swing.JFrame {
                 .addComponent(WelcomeLbl)
                 .addGap(96, 96, 96)
                 .addComponent(jButton1)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         pack();
@@ -98,6 +113,17 @@ public class HomeFrm extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
+//TESTING DB METHODS, REMOVE ME!
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+          Question Q = new Question("Is the the real life?");
+          Q.AuthorId = 1;
+          Q.isValidated = true;
+          Q.answers.add(new Answer("Bla bla ", false));
+          Q.answers.add(new Answer("Nope, Fantasy!", true));
+          Q.dbId = DbAccess.StoreNewQuestion(Q);
+          boolean valsuccess = DbAccess.ToggleQuestionValidation(Q.dbId, false);
+          
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,5 +164,6 @@ public class HomeFrm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel WelcomeLbl;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     // End of variables declaration//GEN-END:variables
 }

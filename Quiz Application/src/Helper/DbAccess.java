@@ -1,6 +1,9 @@
 package Helper;
 
 
+import QuizApp.Core.Quiz;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
 import java.sql.*;
 
 
@@ -166,6 +169,26 @@ catch (SQLException se)
             return false; //something went wrong, will need to be handled!
         }
     }
+    private static int runStatementGetID(String statement)
+    {
+        try
+        {
+            getConnection();
+            Statement st = con.createStatement();
+            int numofkey = st.executeUpdate(statement, Statement.RETURN_GENERATED_KEYS);
+            ResultSet keys = st.getGeneratedKeys();
+            int key = 0;
+            if (keys.next()) {
+            key = keys.getInt(1);
+            }       
+            return key;
+        }
+        catch (SQLException ex)
+        {
+            
+            return 0;
+        }
+    }
     public static Connection con;
 
     public static Boolean saveResults(int QuizId, Map<Integer, Integer> selectedAnswers, int UserId) {
@@ -179,5 +202,48 @@ catch (SQLException se)
        Boolean Success = runStatement(Statement);
        return Success;
                
+    }
+    private static int LastIdentity() throws SQLException
+    {
+        String statement = "values IDENTITY_VAL_LOCAL()";
+        ResultSet rs = getQueryResults(statement);
+        int lastid = rs.getInt(1);
+        
+        return lastid; 
+    }
+    
+    public static Boolean ToggleQuestionValidation(int QDbId, boolean isValid)
+    {
+        String statement = String.format("Update question set isValidated = %s where QuestionID = %d", isValid ? "TRUE" : "FALSE", QDbId);
+        return runStatement(statement);
+    }
+    
+    public static int StoreNewQuestion(Question QuestionToStore)
+    {
+        try {
+        String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,AUTHORID) ";
+        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
+        int QuestionID = runStatementGetID(statement);
+        int i= 1;
+        statement = "INSERT INTO QUESTIONANSWER (QUESTIONID, ANSWERID, ANSWERTEXT, ISCORRECT) VALUES"; 
+        for(Answer a : QuestionToStore.answers)
+        {
+            statement += String.format("(%d, %d, '%s', %s),", QuestionID, i, a.answerText, a.isCorrect ? "TRUE" : "FALSE");
+            i+=1;
+        }
+        boolean Success = runStatement(statement.substring(0, statement.length()-1));
+        if (Success)
+        {
+            return QuestionID;
+        }
+        else
+        {
+            return 0;
+        }
+        }
+        catch (Exception se)
+                {
+                    return 0;
+                }
     }
 }

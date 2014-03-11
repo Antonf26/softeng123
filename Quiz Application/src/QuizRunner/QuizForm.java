@@ -5,7 +5,13 @@
  */
 
 package QuizRunner;
+import QuizApp.Core.Quiz;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
 import Helper.DbAccess;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
+import QuizApp.Core.Quiz;
 import Users.*;
 import java.awt.Color;
 import java.awt.Frame;

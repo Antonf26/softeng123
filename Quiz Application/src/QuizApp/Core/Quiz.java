@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package QuizRunner;
+package QuizApp.Core;
 
+import QuizApp.Core.Question;
 import java.util.ArrayList;
 import java.util.List;
 
