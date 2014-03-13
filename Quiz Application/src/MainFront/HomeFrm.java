@@ -115,9 +115,10 @@ public class HomeFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 //TESTING DB METHODS, REMOVE ME!
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         Quiz qz = new Quiz("TesterQuiz");
-         qz.quizDBId = DbAccess.CreateQuiz(qz);
-         System.out.print(String.valueOf(qz.quizDBId));    
+        List<Question> allQuestions = DbAccess.getAllQuestions();
+        List<Question> validatedOnly = DbAccess.getAllQuestions(true);
+        int qLength1 = allQuestions.size();
+        int qLength2 = validatedOnly.size();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

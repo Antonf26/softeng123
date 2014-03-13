@@ -25,7 +25,7 @@ public class Question {
         answers = new ArrayList<Answer>();
         
     }
-    public Question(String QuestionText, List<Answer> Answers, int CorrectIndex)
+    public Question(String QuestionText, List<Answer> Answers)
     {
         questionText = QuestionText;
         answers = Answers;
