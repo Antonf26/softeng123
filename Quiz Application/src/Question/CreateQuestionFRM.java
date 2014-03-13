@@ -5,18 +5,70 @@
  */
 
 package Question;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
+import Helper.DbAccess;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
 
 /**
  *
  * @author Gareth laptop
  */
-public class CreateQuestionFRM extends javax.swing.JFrame {
+public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListener
+{
 
+    public String questionText;
+    public String Answer1Text;
+    public String Answer2Text;
+    public String Answer3Text;
+    public String Answer4Text;
+    public int CorrectAnswer;
+    
     /**
      * Creates new form CreateQuestion
      */
-    public CreateQuestionFRM() {
+    public CreateQuestionFRM() 
+    {
         initComponents();
+        
+        Submit_btn.addActionListener( this );
+        
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent evt)
+    {
+        if(evt.getSource().equals(Submit_btn))
+        {
+            //BUTTON CODE HERE
+            this.CreateQuestion();
+        }
+
+    }
+    
+    public void CreateQuestion()
+    {
+        // Set Values
+        questionText = QuestionTxt_txtbx.getText();
+        Answer1Text = Answer1_txtbx.getText();
+        Answer2Text = Answer2_txtbx.getText();
+        Answer3Text = Answer3_txtbx.getText();
+        Answer4Text = Answer4_txtbx.getText();
+        
+        
+        
+        // Create question
+        Question q = new Question();
+        q.questionText = questionText;
+        q.answers.add(new Answer(Answer1Text, false)); // need to write if else to make it so it checks which is selected and changes the right one to true and the rest remain false
+        q.answers.add(new Answer(Answer2Text, false));
+        q.answers.add(new Answer(Answer3Text, false));
+        q.answers.add(new Answer(Answer4Text, false));
+        
+        
     }
     
     /**
@@ -31,7 +83,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame {
         Submit_btn = new javax.swing.JButton();
         Title_lbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        QuestionTxt_txtbx = new javax.swing.JTextArea();
         Question_lbl = new javax.swing.JLabel();
         AnswerDes_lbl = new javax.swing.JLabel();
         Answer1_lbl = new javax.swing.JLabel();
@@ -60,9 +112,9 @@ public class CreateQuestionFRM extends javax.swing.JFrame {
         Title_lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title_lbl.setText("Create Question");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        QuestionTxt_txtbx.setColumns(20);
+        QuestionTxt_txtbx.setRows(5);
+        jScrollPane1.setViewportView(QuestionTxt_txtbx);
 
         Question_lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Question_lbl.setText("Please enter question below:-");
@@ -266,6 +318,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame {
     private javax.swing.JRadioButton Answer4_rdbtn;
     private javax.swing.JTextArea Answer4_txtbx;
     private javax.swing.JLabel AnswerDes_lbl;
+    private javax.swing.JTextArea QuestionTxt_txtbx;
     private javax.swing.JLabel Question_lbl;
     private javax.swing.JButton Submit_btn;
     private javax.swing.JLabel Title_lbl;
@@ -274,6 +327,5 @@ public class CreateQuestionFRM extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
