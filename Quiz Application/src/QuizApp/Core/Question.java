@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package QuizRunner;
+package QuizApp.Core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,23 +14,27 @@ import java.util.List;
  * @author Anton
  */
 public class Question {
+    
+    public Question()
+    {
+        answers = new ArrayList<Answer>();
+    }
     public Question (String QuestionText)
     {
         questionText = QuestionText;
         answers = new ArrayList<Answer>();
         
     }
-    public Question(String QuestionText, List<Answer> Answers, int CorrectIndex)
+    public Question(String QuestionText, List<Answer> Answers)
     {
         questionText = QuestionText;
         answers = Answers;
         isValidated = true;
-        correctIndex = CorrectIndex;  
     }
     public String questionText;
     public List<Answer> answers;
     public boolean isValidated;
-    public int correctIndex;
     public int dbId;
-    
+    public int AuthorId;
+
 }

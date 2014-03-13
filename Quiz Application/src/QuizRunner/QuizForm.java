@@ -5,13 +5,20 @@
  */
 
 package QuizRunner;
+import QuizApp.Core.Quiz;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
 import Helper.DbAccess;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
+import QuizApp.Core.Quiz;
 import Users.*;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,10 +39,12 @@ public class QuizForm extends javax.swing.JFrame {
     public QuizForm(Quiz Quiz, User User) {
         quiz = Quiz;
         initComponents();
+        if (quiz.randomiseQuestions) 
+                {
+                    Collections.shuffle(quiz.questionList);
+                }
         qIndex = 0;
-        answersSelected = new int[Quiz.questionList.size()];
         quiztimer = new Timer(1000, timerHit);
-        Arrays.fill(answersSelected, -1);
         ShowQuestion(qIndex);
         setVisible(true);
         user = User;
@@ -44,11 +53,11 @@ public class QuizForm extends javax.swing.JFrame {
         this.setUndecorated(true);
         
         
+        
             }
     private Quiz quiz;
     private int qIndex;
     private User user;
-    private int[] answersSelected;
     private int timeLeft;
     private Map<Integer, Integer> selectedAnswers = new HashMap<Integer, Integer>();
     Timer quiztimer;
@@ -263,6 +272,10 @@ public class QuizForm extends javax.swing.JFrame {
         Question cq = quiz.questionList.get(i);
         QuestionPanel.removeAll();
         AnswerButtons.clearSelection();
+        if (quiz.randomiseQuestions)
+        {
+            Collections.shuffle(cq.answers);
+        }
         JLabel qtextLbl = new JLabel(cq.questionText);
         qtextLbl.setSize(qtextLbl.getPreferredSize());
         int ypos = 20;
@@ -313,7 +326,7 @@ public class QuizForm extends javax.swing.JFrame {
 
     private void saveResults() {
         
-        Boolean saved = DbAccess.saveResults(quiz.dbId, selectedAnswers, user.dbId);
+        Boolean saved = DbAccess.saveResults(quiz.quizDBId, selectedAnswers, user.dbId);
         if (saved)
         {
             QuestionPanel.setBackground(Color.green);

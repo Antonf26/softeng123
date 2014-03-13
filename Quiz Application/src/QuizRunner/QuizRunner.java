@@ -5,6 +5,7 @@
  */
 
 package QuizRunner;
+import QuizApp.Core.Quiz;
 import Users.*;
 /**
  *
