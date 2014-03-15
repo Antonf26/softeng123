@@ -36,5 +36,6 @@ public class Question {
     public boolean isValidated;
     public int dbId;
     public int AuthorId;
+    public boolean isRejected;
 
 }

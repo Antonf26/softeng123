@@ -8,7 +8,7 @@ package Login;
 
 import Helper.DbAccess;
 import MainFront.HomeFrm;
-import Users.User;
+import QuizApp.Core.User;
 
 /**
  *
@@ -119,23 +119,21 @@ public class LoginFrame extends javax.swing.JFrame {
        String uName = unameField.getText();
        char[] pwd = pwdField.getPassword();
        String pwds = new String(pwd);
-       int[] uDetails = DbAccess.GetUser(uName, pwds);
-       //pwdField.setText(Integer.toString(uType));
-       if(uDetails[0] > 0)
+       //int[] uDetails = DbAccess.GetUser(uName, pwds);
+       User newUser = DbAccess.LoginUser(uName, pwds);
+       
+       if (newUser != null)
        {
-           User usr = new User(uDetails[0], uName);
-           usr.dbId = uDetails[1];
-           HomeFrm hf = new HomeFrm(usr);
+           HomeFrm hf = new HomeFrm(newUser);
            hf.setVisible(true);
            this.setVisible(false);
        }
        else
-        {
-            errorLbl.setText("Trouble logging in!");
-            
-
-
-        }
+       {
+           errorLbl.setText("Trouble logging in!");
+       }
+       //pwdField.setText(Integer.toString(uType));
+       
        
     }//GEN-LAST:event_loginBtnActionPerformed
 
