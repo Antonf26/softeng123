@@ -162,6 +162,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         
         
         // Display question in form
+        
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
