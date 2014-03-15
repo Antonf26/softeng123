@@ -42,8 +42,6 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
         Answer3_rdbtn.addActionListener( this );
         Answer4_rdbtn.addActionListener( this );
         
-        
-        
     }
     
     @Override
@@ -86,7 +84,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
         q.answers.add(new Answer(Answer4Text, Answer4Correct));
         
         // Update database
-        Question.dbId = DbAccess.StoreNewQuestion(q);
+        DbAccess.StoreNewQuestion(q);
  
     }
     
