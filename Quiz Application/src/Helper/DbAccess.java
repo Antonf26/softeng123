@@ -256,6 +256,18 @@ catch (SQLException se)
         return runStatement(statement);
     }
     
+     /**
+     * Switches a question's status between rejected and not rejected
+     * @param QDbId - Question's dbID
+     * @param isValid - boolean (true for validated, false for not validated).
+     * @return boolean to indicate success/failure
+     */
+    public static Boolean ToggleQuestionRejection(int QDbId, boolean isRejected)
+    {
+        String statement = String.format("Update question set isRejected = %s where QuestionID = %d", isRejected ? "TRUE" : "FALSE", QDbId);
+        return runStatement(statement);
+    }
+    
     /**
      * Updates details of existing quesiton. (Note your quesiton object MUST already be populated with its dbId for this to work). Can add answers and edit existing ones!
      * @param QuestionToUpdate - Takes a question object - will make the data on the db MATCH the state of the question object you pass to it. 
@@ -264,7 +276,7 @@ catch (SQLException se)
     public static Boolean UpdateQuestion(Question QuestionToUpdate)
     {
         List<String> statements = new ArrayList<String>();
-        statements.add(String.format("Update Question Set QuestionText = '%s', isValidated = %s where QuestionId = %d", QuestionToUpdate.questionText, QuestionToUpdate.isValidated? "TRUE" : "FALSE", QuestionToUpdate.dbId));
+        statements.add(String.format("Update Question Set QuestionText = '%s', isValidated = %s, isRejected = %s where QuestionId = %d", QuestionToUpdate.questionText, QuestionToUpdate.isValidated? "TRUE" : "FALSE", QuestionToUpdate.isRejected? "True" : "False", QuestionToUpdate.dbId));
 
         for (Answer A : QuestionToUpdate.answers)
         {
@@ -297,8 +309,8 @@ catch (SQLException se)
     public static int StoreNewQuestion(Question QuestionToStore)
     {
         try {
-        String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,AUTHORID) ";
-        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
+        String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,ISREJECTED,AUTHORID) ";
+        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.isRejected ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
         int QuestionID = runStatementGetID(statement);
         int i= 1;
         statement = "INSERT INTO QUESTIONANSWER (QUESTIONID, ANSWERID, ANSWERTEXT, ISCORRECT) VALUES"; 
