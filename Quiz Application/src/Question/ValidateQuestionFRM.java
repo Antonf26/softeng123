@@ -82,8 +82,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
             else
             {
                 // Message box pop up to say please select correct answer
-                JOptionPane.showInputDialog("Please indicate correct answer");
-            
+                JOptionPane.showMessageDialog(null,"Please indicate correct answer.","Error",JOptionPane.WARNING_MESSAGE);
+                
             }
         }
         if(evt.getSource().equals(Next_btn))
