@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -73,15 +73,17 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         }
         if(evt.getSource().equals(Edit_btn))
         {
-            if(Answer1Correct && Answer2Correct && Answer3Correct && Answer4Correct != true)
+            if(Answer1Correct || Answer2Correct || Answer3Correct || Answer4Correct)
             {
-                // Message box pop up to say please select correct answer
-                JOptionPane.showInputDialog("Please indicate correct answer");
+                //BUTTON CODE HERE
+                this.EditQuestion();
                 
             }
             else
-            {//BUTTON CODE HERE
-            this.EditQuestion();
+            {
+                // Message box pop up to say please select correct answer
+                JOptionPane.showInputDialog("Please indicate correct answer");
+            
             }
         }
         if(evt.getSource().equals(Next_btn))
@@ -125,6 +127,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         
         // Create question
         Question q = new Question();
+        q.AuthorId = 1341131;
+        q.isRejected = false;
         q.questionText = questionText;
         q.answers.add(new Answer(Answer1Text, Answer1Correct)); 
         q.answers.add(new Answer(Answer2Text, Answer2Correct));
@@ -423,59 +427,31 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     }// </editor-fold>//GEN-END:initComponents
 
     private void Answer1_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer1_rdbtnActionPerformed
-        if(Answer2Correct && Answer3Correct && Answer4Correct != false)
-        {
             Answer2Correct = false;
             Answer3Correct = false;
             Answer4Correct = false;
             Answer1Correct = true;
-        }
-        else
-        {
-            Answer1Correct = true;
-        }
     }//GEN-LAST:event_Answer1_rdbtnActionPerformed
 
     private void Answer2_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer2_rdbtnActionPerformed
-        if(Answer1Correct && Answer3Correct && Answer4Correct != false)
-        {
             Answer1Correct = false;
             Answer3Correct = false;
             Answer4Correct = false;
-            Answer2Correct = true;
-        }
-        else
-        {
-            Answer2Correct = true;
-        }        
+            Answer2Correct = true;     
     }//GEN-LAST:event_Answer2_rdbtnActionPerformed
 
     private void Answer3_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer3_rdbtnActionPerformed
-        if(Answer1Correct && Answer2Correct && Answer4Correct != false)
-        {
             Answer1Correct = false;
             Answer2Correct = false;
             Answer4Correct = false;
             Answer3Correct = true;
-        }
-        else
-        {
-            Answer3Correct = true;
-        }
     }//GEN-LAST:event_Answer3_rdbtnActionPerformed
 
     private void Answer4_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer4_rdbtnActionPerformed
-        if(Answer1Correct && Answer2Correct && Answer3Correct != false)
-        {
             Answer1Correct = false;
             Answer2Correct = false;
             Answer3Correct = false;
             Answer4Correct = true;
-        }
-        else
-        {
-            Answer4Correct = true;
-        }
     }//GEN-LAST:event_Answer4_rdbtnActionPerformed
 
     /**
