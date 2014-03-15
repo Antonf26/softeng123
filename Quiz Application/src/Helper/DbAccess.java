@@ -4,6 +4,8 @@ package Helper;
 import QuizApp.Core.Quiz;
 import QuizApp.Core.Answer;
 import QuizApp.Core.Question;
+import QuizApp.Core.QuizResult;
+import QuizApp.Core.QuizResultRow;
 import java.sql.*;
 import QuizRunner.*;
 import QuizApp.Core.User;
@@ -427,8 +429,40 @@ catch (SQLException se)
         
     }
     
+    public static QuizResult getQuizResult(int QuizId, int UserId)
+    {
+        try
+        {
+            QuizResult qr = new QuizResult();
+            String statement = String.format("select  qr.questionid ,qr.ANSWERID, q.questiontext, qa.answertext, qa.iscorrect, qca.answertext as correctanswer\n" +
+"from quizresult qr\n" +
+"join question q on qr.QUESTIONID = q.QUESTIONID\n" +
+"join questionanswer qa on qr.QUESTIONID = qa.QUESTIONID and qr.ANSWERID = qa.ANSWERID\n" +
+"join (select answertext, questionid from questionanswer where iscorrect = true) qca\n" +
+"on qa.QUESTIONID = qca.questionid\n" +
+"where userid = %d and quizid = %d",  UserId, QuizId);
+            
+            ResultSet rs = getQueryResults(statement);
+            while (rs.next())
+            {
+                QuizResultRow qrr = new QuizResultRow();
+                qrr.questionText = rs.getString("QuestionText");
+                qrr.isCorrect = rs.getBoolean("isCorrect");
+                qrr.selectedAnswerText = rs.getString("Answertext");
+                qrr.correctAnswerText = rs.getString("CorrectAnswer");
+                qr.ResultRows.add(qrr);
+            }
+            return qr;
+        }
+        
+        catch (SQLException ex)
+        {   
+            return null;
+        }
+        
+    }
     ///Private methods below used to directly call to the db and return data if needed. 
-        private static ResultSet getQueryResults(String query) throws SQLException
+    private static ResultSet getQueryResults(String query) throws SQLException
     {
         getConnection();
         Statement st = con.createStatement();
