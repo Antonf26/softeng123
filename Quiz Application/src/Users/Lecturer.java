@@ -6,6 +6,8 @@
 
 package Users;
 
+import QuizApp.Core.User;
+
 /**
  *
  * @author Anton

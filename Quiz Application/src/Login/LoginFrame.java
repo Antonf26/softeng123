@@ -8,7 +8,7 @@ package Login;
 
 import Helper.DbAccess;
 import MainFront.HomeFrm;
-import Users.User;
+import QuizApp.Core.User;
 
 /**
  *

@@ -6,7 +6,7 @@ import QuizApp.Core.Answer;
 import QuizApp.Core.Question;
 import java.sql.*;
 import QuizRunner.*;
-import Users.User;
+import QuizApp.Core.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +68,31 @@ catch (SQLException se)
             return new int[]{-1,-1}; //Login FAILED!
             }   
 }
+    public static User LoginUser(String username, String password)
+    {
+    try
+    {
+       String query = String.format("SELECT * FROM APPUSERS WHERE USERNAME = '%s' AND PASSWORD  ='%s'", username, password);
+       
+       User loginUser = new User();
+       ResultSet rs = getQueryResults(query);
+       if (rs.next())
+       {
+           loginUser.userName = rs.getString("UserName");
+           loginUser.fullName = rs.getString("FullName");
+           loginUser.dbId = rs.getInt("UserId");
+           int utype = rs.getInt("usertypeid");
+           loginUser.utype = User.UserType.values()[utype-1];
+           return loginUser;
+       }
+       return null;
+       
+    }
+    catch (SQLException ex)
+    {
+        return null;
+    }
+    }
     
     
     /**
@@ -362,6 +387,7 @@ catch (SQLException se)
           q.dbId = qrs.getInt("QuestionID");
           q.AuthorId = qrs.getInt("AuthorID");
           q.isValidated = qrs.getBoolean("ISVALIDATED");
+          q.isRejected = qrs.getBoolean("ISREJECTED");
         }
         
         String astatement = String.format("Select * from questionanswer where questionid = %d", QDbId);
