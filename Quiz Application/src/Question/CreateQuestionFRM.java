@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
 /**
  *
  * @author Gareth laptop
@@ -25,7 +24,10 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
     public String Answer2Text;
     public String Answer3Text;
     public String Answer4Text;
-    public int CorrectAnswer;
+    public boolean Answer1Correct = false;
+    public boolean Answer2Correct = false;
+    public boolean Answer3Correct = false;
+    public boolean Answer4Correct = false;
     
     /**
      * Creates new form CreateQuestion
@@ -35,22 +37,39 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
         initComponents();
         
         Submit_btn.addActionListener( this );
+        Answer1_rdbtn.addActionListener( this );
+        Answer2_rdbtn.addActionListener( this );
+        Answer3_rdbtn.addActionListener( this );
+        Answer4_rdbtn.addActionListener( this );
+        
+        
         
     }
     
     @Override
     public void actionPerformed(ActionEvent evt)
     {
+       
         if(evt.getSource().equals(Submit_btn))
         {
+            if(Answer1Correct && Answer2Correct && Answer3Correct && Answer4Correct != true)
+            {
+                // Message box pop up to say please select correct answer
+                JOptionPane.showInputDialog("Please indicate correct answer");
+                
+            }
+            else
+            {
             //BUTTON CODE HERE
             this.CreateQuestion();
+            }
         }
-
+        
     }
     
     public void CreateQuestion()
     {
+        
         // Set Values
         questionText = QuestionTxt_txtbx.getText();
         Answer1Text = Answer1_txtbx.getText();
@@ -58,17 +77,17 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
         Answer3Text = Answer3_txtbx.getText();
         Answer4Text = Answer4_txtbx.getText();
         
-        
-        
         // Create question
         Question q = new Question();
         q.questionText = questionText;
-        q.answers.add(new Answer(Answer1Text, false)); // need to write if else to make it so it checks which is selected and changes the right one to true and the rest remain false
-        q.answers.add(new Answer(Answer2Text, false));
-        q.answers.add(new Answer(Answer3Text, false));
-        q.answers.add(new Answer(Answer4Text, false));
+        q.answers.add(new Answer(Answer1Text, Answer1Correct)); 
+        q.answers.add(new Answer(Answer2Text, Answer2Correct));
+        q.answers.add(new Answer(Answer3Text, Answer3Correct));
+        q.answers.add(new Answer(Answer4Text, Answer4Correct));
         
-        
+        // Update database
+        Question.dbId = DbAccess.StoreNewQuestion(q);
+ 
     }
     
     /**
@@ -80,6 +99,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        AnswerGroup = new javax.swing.ButtonGroup();
         Submit_btn = new javax.swing.JButton();
         Title_lbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -151,10 +171,32 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
         Answer4_txtbx.setRows(5);
         jScrollPane5.setViewportView(Answer4_txtbx);
 
+        AnswerGroup.add(Answer1_rdbtn);
         Answer1_rdbtn.setToolTipText("");
         Answer1_rdbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Answer1_rdbtnActionPerformed(evt);
+            }
+        });
+
+        AnswerGroup.add(Answer2_rdbtn);
+        Answer2_rdbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Answer2_rdbtnActionPerformed(evt);
+            }
+        });
+
+        AnswerGroup.add(Answer3_rdbtn);
+        Answer3_rdbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Answer3_rdbtnActionPerformed(evt);
+            }
+        });
+
+        AnswerGroup.add(Answer4_rdbtn);
+        Answer4_rdbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Answer4_rdbtnActionPerformed(evt);
             }
         });
 
@@ -266,8 +308,60 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
     }// </editor-fold>//GEN-END:initComponents
 
     private void Answer1_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer1_rdbtnActionPerformed
-        // TODO add your handling code here:
+        if(Answer2Correct && Answer3Correct && Answer4Correct != false)
+        {
+            Answer2Correct = false;
+            Answer3Correct = false;
+            Answer4Correct = false;
+            Answer1Correct = true;
+        }
+        else
+        {
+            Answer1Correct = true;
+        }
     }//GEN-LAST:event_Answer1_rdbtnActionPerformed
+
+    private void Answer3_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer3_rdbtnActionPerformed
+        if(Answer1Correct && Answer2Correct && Answer4Correct != false)
+        {
+            Answer1Correct = false;
+            Answer2Correct = false;
+            Answer4Correct = false;
+            Answer3Correct = true;
+        }
+        else
+        {
+            Answer3Correct = true;
+        }
+    }//GEN-LAST:event_Answer3_rdbtnActionPerformed
+
+    private void Answer2_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer2_rdbtnActionPerformed
+        if(Answer1Correct && Answer3Correct && Answer4Correct != false)
+        {
+            Answer1Correct = false;
+            Answer3Correct = false;
+            Answer4Correct = false;
+            Answer2Correct = true;
+        }
+        else
+        {
+            Answer2Correct = true;
+        }        
+    }//GEN-LAST:event_Answer2_rdbtnActionPerformed
+
+    private void Answer4_rdbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Answer4_rdbtnActionPerformed
+        if(Answer1Correct && Answer2Correct && Answer3Correct != false)
+        {
+            Answer1Correct = false;
+            Answer2Correct = false;
+            Answer3Correct = false;
+            Answer4Correct = true;
+        }
+        else
+        {
+            Answer4Correct = true;
+        }        
+    }//GEN-LAST:event_Answer4_rdbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -318,6 +412,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
     private javax.swing.JRadioButton Answer4_rdbtn;
     private javax.swing.JTextArea Answer4_txtbx;
     private javax.swing.JLabel AnswerDes_lbl;
+    private javax.swing.ButtonGroup AnswerGroup;
     private javax.swing.JTextArea QuestionTxt_txtbx;
     private javax.swing.JLabel Question_lbl;
     private javax.swing.JButton Submit_btn;

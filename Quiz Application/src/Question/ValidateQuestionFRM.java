@@ -5,20 +5,120 @@
  */
 
 package Question;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
+import Helper.DbAccess;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
  *
  * @author Gareth laptop
  */
-public class ValidateQuestionFRM extends javax.swing.JFrame {
+public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionListener
+{
+    
+    public String questionText;
+    public String Answer1Text;
+    public String Answer2Text;
+    public String Answer3Text;
+    public String Answer4Text;
+    public boolean Answer1Correct = false;
+    public boolean Answer2Correct = false;
+    public boolean Answer3Correct = false;
+    public boolean Answer4Correct = false;
 
     /**
      * Creates new form CreateQuestion
      */
-    public ValidateQuestionFRM() {
+    public ValidateQuestionFRM() 
+    {
         initComponents();
+        
+        Approve_btn.addActionListener( this );
+        Reject_btn.addActionListener( this );
+        Edit_btn.addActionListener( this );
+        Next_btn.addActionListener( this );
+        Previous_btn.addActionListener( this );
+        Answer1_rdbtn.addActionListener( this );
+        Answer2_rdbtn.addActionListener( this );
+        Answer3_rdbtn.addActionListener( this );
+        Answer4_rdbtn.addActionListener( this );
+        
+        this.SetUp()
+    }
+    
+    public SetUp();
+    {
+        // Connect to database
+        DbAccess.getConnection();
+        
+        // Get questions
+        DbAccess.getAllQuestions();
+        
+        
+        
+        
+        return q
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent evt)
+    {
+       
+        if(evt.getSource().equals(Approve_btn))
+        {
+            //BUTTON CODE HERE
+            this.ApproveQuestion();
+        }
+        if(evt.getSource().equals(Reject_btn))
+        {
+            //BUTTON CODE HERE
+            this.RejectQuestion();
+        }
+        if(evt.getSource().equals(Edit_btn))
+        {
+            //BUTTON CODE HERE
+            this.EditQuestion();
+        }
+        if(evt.getSource().equals(Next_btn))
+        {
+            //BUTTON CODE HERE
+            this.NextQuestion();
+        }
+        if(evt.getSource().equals(Previous_btn))
+        {
+            //BUTTON CODE HERE
+            this.PreviousQuestion();
+        }
+             
     }
 
+    public void ApproveQuestion()
+    {
+        
+    }
+    
+    public void RejectQuestion()
+    {
+        
+    }
+    
+    public void EditQuestion()
+    {
+        
+    }
+    
+    public void NextQuestion()
+    {
+        
+    }
+    
+    public void PreviousQuestion()
+    {
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,10 +128,11 @@ public class ValidateQuestionFRM extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        AnswerGroup = new javax.swing.ButtonGroup();
         Previous_btn = new javax.swing.JButton();
         Title_lbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        QuestionText_txtbx = new javax.swing.JTextArea();
         Question_lbl = new javax.swing.JLabel();
         AnswerDes_lbl = new javax.swing.JLabel();
         Answer1_lbl = new javax.swing.JLabel();
@@ -64,9 +165,9 @@ public class ValidateQuestionFRM extends javax.swing.JFrame {
         Title_lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title_lbl.setText("Validate Question");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        QuestionText_txtbx.setColumns(20);
+        QuestionText_txtbx.setRows(5);
+        jScrollPane1.setViewportView(QuestionText_txtbx);
 
         Question_lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Question_lbl.setText("Please review question below:-");
@@ -110,6 +211,14 @@ public class ValidateQuestionFRM extends javax.swing.JFrame {
         Reject_btn.setText("Reject");
 
         Next_btn.setText("Next");
+
+        AnswerGroup.add(Answer1_rdbtn);
+
+        AnswerGroup.add(Answer2_rdbtn);
+
+        AnswerGroup.add(Answer3_rdbtn);
+
+        AnswerGroup.add(Answer4_rdbtn);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -280,10 +389,12 @@ public class ValidateQuestionFRM extends javax.swing.JFrame {
     private javax.swing.JRadioButton Answer4_rdbtn;
     private javax.swing.JTextArea Answer4_txtbx;
     private javax.swing.JLabel AnswerDes_lbl;
+    private javax.swing.ButtonGroup AnswerGroup;
     private javax.swing.JButton Approve_btn;
     private javax.swing.JButton Edit_btn;
     private javax.swing.JButton Next_btn;
     private javax.swing.JButton Previous_btn;
+    private javax.swing.JTextArea QuestionText_txtbx;
     private javax.swing.JLabel Question_lbl;
     private javax.swing.JButton Reject_btn;
     private javax.swing.JLabel Title_lbl;
@@ -292,6 +403,5 @@ public class ValidateQuestionFRM extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
