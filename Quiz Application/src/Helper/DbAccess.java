@@ -24,9 +24,11 @@ public class DbAccess {
 try
 {
     
-
+    /*
+    Remember to change quizAppDB to quizApp (for Dean)
+    */
         Class.forName("org.apache.derby.jdbc.ClientDriver");
-        con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizAppDb", "test", "test");
+        con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizApp", "test", "test");
         con.setAutoCommit(true);
 }
 catch (ClassNotFoundException ce)
