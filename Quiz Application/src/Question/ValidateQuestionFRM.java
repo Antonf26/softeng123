@@ -11,6 +11,8 @@ import Helper.DbAccess;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,6 +30,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public boolean Answer2Correct = false;
     public boolean Answer3Correct = false;
     public boolean Answer4Correct = false;
+    public int i;
 
     /**
      * Creates new form CreateQuestion
@@ -46,13 +49,26 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer3_rdbtn.addActionListener( this );
         Answer4_rdbtn.addActionListener( this );
         
-        //this.SetUp()
+        //this.SetUp();
     }
-    
-    /*public SetUp();
+    /*
+    public SetUp()
     {        
         // Get questions
-        DbAccess.getAllQuestions();
+        List<Question> allQuestions = DbAccess.getAllQuestions();
+        int numberQuestions = allQuestions.size();
+        
+        Question q = new Question();
+        
+        q.questionText = allQuestions.get(i).questionText;
+        q.answers = allQuestions.get(i).answers;
+        q.answers = allQuestions.get(i).answers;
+        q.answers = allQuestions.get(i).answers;
+        q.answers = allQuestions.get(i).answers;
+        
+        
+        
+        
         
         return q
     }*/
