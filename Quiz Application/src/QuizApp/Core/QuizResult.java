@@ -5,21 +5,19 @@ import QuizApp.Core.Quiz;
 import QuizApp.Core.Answer;
 import QuizApp.Core.Question;
 import Users.*;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Anton
  */
 public class QuizResult {
-    public QuizResult(Quiz Quiz, User user)
+    public QuizResult()
     {
-        quiz = Quiz;
+      ResultRows = new ArrayList<QuizResultRow>();
     }
     
-    private Quiz quiz;
-    public void recordAnswer(Question q, Answer a){
-        
-        
-    }
+    public List<QuizResultRow> ResultRows;
     
     
 }

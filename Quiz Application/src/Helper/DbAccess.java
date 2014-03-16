@@ -4,6 +4,8 @@ package Helper;
 import QuizApp.Core.Quiz;
 import QuizApp.Core.Answer;
 import QuizApp.Core.Question;
+import QuizApp.Core.QuizResult;
+import QuizApp.Core.QuizResultRow;
 import java.sql.*;
 import QuizRunner.*;
 import QuizApp.Core.User;
@@ -256,6 +258,18 @@ catch (SQLException se)
         return runStatement(statement);
     }
     
+     /**
+     * Switches a question's status between rejected and not rejected
+     * @param QDbId - Question's dbID
+     * @param isValid - boolean (true for validated, false for not validated).
+     * @return boolean to indicate success/failure
+     */
+    public static Boolean ToggleQuestionRejection(int QDbId, boolean isRejected)
+    {
+        String statement = String.format("Update question set isRejected = %s where QuestionID = %d", isRejected ? "TRUE" : "FALSE", QDbId);
+        return runStatement(statement);
+    }
+    
     /**
      * Updates details of existing quesiton. (Note your quesiton object MUST already be populated with its dbId for this to work). Can add answers and edit existing ones!
      * @param QuestionToUpdate - Takes a question object - will make the data on the db MATCH the state of the question object you pass to it. 
@@ -264,7 +278,7 @@ catch (SQLException se)
     public static Boolean UpdateQuestion(Question QuestionToUpdate)
     {
         List<String> statements = new ArrayList<String>();
-        statements.add(String.format("Update Question Set QuestionText = '%s', isValidated = %s where QuestionId = %d", QuestionToUpdate.questionText, QuestionToUpdate.isValidated? "TRUE" : "FALSE", QuestionToUpdate.dbId));
+        statements.add(String.format("Update Question Set QuestionText = '%s', isValidated = %s, isRejected = %s where QuestionId = %d", QuestionToUpdate.questionText, QuestionToUpdate.isValidated? "TRUE" : "FALSE", QuestionToUpdate.isRejected? "True" : "False", QuestionToUpdate.dbId));
 
         for (Answer A : QuestionToUpdate.answers)
         {
@@ -297,8 +311,8 @@ catch (SQLException se)
     public static int StoreNewQuestion(Question QuestionToStore)
     {
         try {
-        String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,AUTHORID) ";
-        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
+        String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,ISREJECTED,AUTHORID) ";
+        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.isRejected ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
         int QuestionID = runStatementGetID(statement);
         int i= 1;
         statement = "INSERT INTO QUESTIONANSWER (QUESTIONID, ANSWERID, ANSWERTEXT, ISCORRECT) VALUES"; 
@@ -415,8 +429,40 @@ catch (SQLException se)
         
     }
     
+    public static QuizResult getQuizResult(int QuizId, int UserId)
+    {
+        try
+        {
+            QuizResult qr = new QuizResult();
+            String statement = String.format("select  qr.questionid ,qr.ANSWERID, q.questiontext, qa.answertext, qa.iscorrect, qca.answertext as correctanswer\n" +
+"from quizresult qr\n" +
+"join question q on qr.QUESTIONID = q.QUESTIONID\n" +
+"join questionanswer qa on qr.QUESTIONID = qa.QUESTIONID and qr.ANSWERID = qa.ANSWERID\n" +
+"join (select answertext, questionid from questionanswer where iscorrect = true) qca\n" +
+"on qa.QUESTIONID = qca.questionid\n" +
+"where userid = %d and quizid = %d",  UserId, QuizId);
+            
+            ResultSet rs = getQueryResults(statement);
+            while (rs.next())
+            {
+                QuizResultRow qrr = new QuizResultRow();
+                qrr.questionText = rs.getString("QuestionText");
+                qrr.isCorrect = rs.getBoolean("isCorrect");
+                qrr.selectedAnswerText = rs.getString("Answertext");
+                qrr.correctAnswerText = rs.getString("CorrectAnswer");
+                qr.ResultRows.add(qrr);
+            }
+            return qr;
+        }
+        
+        catch (SQLException ex)
+        {   
+            return null;
+        }
+        
+    }
     ///Private methods below used to directly call to the db and return data if needed. 
-        private static ResultSet getQueryResults(String query) throws SQLException
+    private static ResultSet getQueryResults(String query) throws SQLException
     {
         getConnection();
         Statement st = con.createStatement();
