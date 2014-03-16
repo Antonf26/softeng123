@@ -27,10 +27,10 @@ try
 {
     
     /*
-    Remember to change quizAppDB to quizApp (for Dean)
+    Remember to change quizAppDB to quizApp (for Dean and possibly others)
     */
         Class.forName("org.apache.derby.jdbc.ClientDriver");
-        con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizApp", "test", "test");
+        con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizAppdb", "test", "test");
         con.setAutoCommit(true);
 }
 catch (ClassNotFoundException ce)
@@ -434,13 +434,15 @@ catch (SQLException se)
         try
         {
             QuizResult qr = new QuizResult();
-            String statement = String.format("select  qr.questionid ,qr.ANSWERID, q.questiontext, qa.answertext, qa.iscorrect, qca.answertext as correctanswer\n" +
-"from quizresult qr\n" +
-"join question q on qr.QUESTIONID = q.QUESTIONID\n" +
-"join questionanswer qa on qr.QUESTIONID = qa.QUESTIONID and qr.ANSWERID = qa.ANSWERID\n" +
+            String statement = String.format("select  qq.questionid ,coalesce(qr.ANSWERID, 0) AnswerID, q.questiontext, coalesce(qr.answertext, 'NONE') ANSWERTEXT, coalesce(qr.iscorrect, false) ISCORRECT, qca.answertext as correctanswer\n" +
+"from quizquestion qq join question q on qq.QUESTIONID = q.QUESTIONID\n" +
+"left outer join (select iq.QUESTIONID, iq.ANSWERID, iqa.AnswerText, iqa.iscorrect from quizresult iq \n" +
+"join questionanswer iqa on iq.ANSWERID = iqa.ANSWERID and iq.QUESTIONID = iqa.QUESTIONID where userid = %d and quizid = %d) qr\n" +
+"on qq.QUESTIONID = qr.QUESTIONID\n" +
 "join (select answertext, questionid from questionanswer where iscorrect = true) qca\n" +
-"on qa.QUESTIONID = qca.questionid\n" +
-"where userid = %d and quizid = %d",  UserId, QuizId);
+"on qq.QUESTIONID = qca.questionid\n" +
+"where qq.quizid = %d" +
+"",  UserId, QuizId, QuizId);
             
             ResultSet rs = getQueryResults(statement);
             while (rs.next())
