@@ -20,4 +20,5 @@ public class QuizResult {
     public List<QuizResultRow> ResultRows;
     
     
+    
 }
