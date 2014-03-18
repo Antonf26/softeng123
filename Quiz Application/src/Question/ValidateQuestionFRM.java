@@ -30,7 +30,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public boolean Answer2Correct = false;
     public boolean Answer3Correct = false;
     public boolean Answer4Correct = false;
-    public int i;
+    public int dbId;
+    public int i = 0;
 
     /**
      * Creates new form CreateQuestion
@@ -49,29 +50,32 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer3_rdbtn.addActionListener( this );
         Answer4_rdbtn.addActionListener( this );
         
-        //this.SetUp();
+        this.SetUp();
     }
-    /*
-    public SetUp()
+    
+    public void SetUp()
     {        
         // Get questions
         List<Question> allQuestions = DbAccess.getAllQuestions();
-        int numberQuestions = allQuestions.size();
+        /*int numberQuestions = allQuestions.size();*/
         
-        Question q = new Question();
+        Question s = new Question();
+        s = allQuestions.get(i);
+        List<Answer> sanswers = s.answers;
         
-        q.questionText = allQuestions.get(i).questionText;
-        q.answers = allQuestions.get(i).answers;
-        q.answers = allQuestions.get(i).answers;
-        q.answers = allQuestions.get(i).answers;
-        q.answers = allQuestions.get(i).answers;
+        questionText = s.questionText;
+        dbId = s.dbId;
+        Answer1Text = sanswers.get(0).answerText;
+        Answer1Correct = sanswers.get(0).isCorrect;
+        Answer2Text = sanswers.get(1).answerText;
+        Answer2Correct = sanswers.get(1).isCorrect;
+        Answer3Text = sanswers.get(2).answerText;
+        Answer3Correct = sanswers.get(2).isCorrect;
         
         
+        //QuestionText_txtbx.setEnabled(false);
         
-        
-        
-        return q
-    }*/
+    }
     
     @Override
     public void actionPerformed(ActionEvent evt)
@@ -150,6 +154,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         q.answers.add(new Answer(Answer2Text, Answer2Correct));
         q.answers.add(new Answer(Answer3Text, Answer3Correct));
         q.answers.add(new Answer(Answer4Text, Answer4Correct));
+        q.answers.get(0).answerText = Answer1Text;
+        
         
         DbAccess.UpdateQuestion(q);
     }
