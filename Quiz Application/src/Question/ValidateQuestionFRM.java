@@ -30,8 +30,11 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public boolean Answer2Correct = false;
     public boolean Answer3Correct = false;
     public boolean Answer4Correct = false;
-    public int QuestiondbId;
-    
+    public int QuestionDbId;
+    public int Answer1DbId;
+    public int Answer2DbId;
+    public int Answer3DbId;
+    public int Answer4DbId;
     public int i = 0;
 
     /**
@@ -58,22 +61,26 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     {        
         // Get questions
         List<Question> allQuestions = DbAccess.getAllQuestions();
-        /*int numberQuestions = allQuestions.size();*/
         
         Question s = new Question();
         s = allQuestions.get(i);
         List<Answer> sanswers = s.answers;
         
+        // Assign values from the question to the variables
         questionText = s.questionText;
-        QuestiondbId = s.dbId;
+        QuestionDbId = s.dbId;
         Answer1Text = sanswers.get(0).answerText;
         Answer1Correct = sanswers.get(0).isCorrect;
+        Answer1DbId = sanswers.get(0).dbId;
         Answer2Text = sanswers.get(1).answerText;
         Answer2Correct = sanswers.get(1).isCorrect;
+        Answer2DbId = sanswers.get(1).dbId;
         Answer3Text = sanswers.get(2).answerText;
         Answer3Correct = sanswers.get(2).isCorrect;
+        Answer3DbId = sanswers.get(2).dbId;
         Answer4Text = sanswers.get(3).answerText;
         Answer4Correct = sanswers.get(3).isCorrect;
+        Answer4DbId = sanswers.get(3).dbId;
         
         // Display question and answer text
         QuestionText_txtbx.setText(questionText);
@@ -83,17 +90,22 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer4_txtbx.setText(Answer4Text);
         
         // Set Correct Answer Radio buttons
-        Answer1_rdbtn.setEnabled(Answer1Correct);
-        Answer2_rdbtn.setEnabled(Answer2Correct);
-        Answer3_rdbtn.setEnabled(Answer3Correct);
-        Answer4_rdbtn.setEnabled(Answer4Correct);
+        Answer1_rdbtn.setSelected(Answer1Correct);
+        Answer2_rdbtn.setSelected(Answer2Correct);
+        Answer3_rdbtn.setSelected(Answer3Correct);
+        Answer4_rdbtn.setSelected(Answer4Correct);
         
+        // Set Text Boxes to stop editing unless edit button is clicked
+        QuestionText_txtbx.setEnabled(false);
+        Answer1_txtbx.setEnabled(false);
+        Answer2_txtbx.setEnabled(false);
+        Answer4_txtbx.setEnabled(false);
         
-        
-        
-        
-        
-        //QuestionText_txtbx.setEnabled(false);
+        // Set radio buttons to stop editing unless edit button is clicked
+        Answer1_rdbtn.setEnabled(false);
+        Answer2_rdbtn.setEnabled(false);
+        Answer3_rdbtn.setEnabled(false);
+        Answer4_rdbtn.setEnabled(false);
         
     }
     
@@ -170,19 +182,31 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         q.AuthorId = 1341131;
         q.isRejected = false;
         q.questionText = questionText;
+        /*
         q.answers.add(new Answer(Answer1Text, Answer1Correct)); 
         q.answers.add(new Answer(Answer2Text, Answer2Correct));
         q.answers.add(new Answer(Answer3Text, Answer3Correct));
         q.answers.add(new Answer(Answer4Text, Answer4Correct));
+        */
+        
+        /***********************************************************************
+        *****     Don't forget about both question and Answer id's      ********
+        ***********************************************************************/
+         
         q.answers.get(0).answerText = Answer1Text;
         
+        //QuestionText_txtbx.setEnabled(false);
         
         DbAccess.UpdateQuestion(q);
     }
     
     public void NextQuestion()
     {
+        /*int numberQuestions = allQuestions.size();*/
+
         // the question id for the question loaded in form
+        
+        
         
         
         // Current Question Id incremented by 1
