@@ -30,7 +30,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public boolean Answer2Correct = false;
     public boolean Answer3Correct = false;
     public boolean Answer4Correct = false;
-    public int dbId;
+    public int QuestiondbId;
+    
     public int i = 0;
 
     /**
@@ -64,13 +65,32 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         List<Answer> sanswers = s.answers;
         
         questionText = s.questionText;
-        dbId = s.dbId;
+        QuestiondbId = s.dbId;
         Answer1Text = sanswers.get(0).answerText;
         Answer1Correct = sanswers.get(0).isCorrect;
         Answer2Text = sanswers.get(1).answerText;
         Answer2Correct = sanswers.get(1).isCorrect;
         Answer3Text = sanswers.get(2).answerText;
         Answer3Correct = sanswers.get(2).isCorrect;
+        Answer4Text = sanswers.get(3).answerText;
+        Answer4Correct = sanswers.get(3).isCorrect;
+        
+        // Display question and answer text
+        QuestionText_txtbx.setText(questionText);
+        Answer1_txtbx.setText(Answer1Text);
+        Answer2_txtbx.setText(Answer2Text);
+        Answer3_txtbx.setText(Answer3Text);
+        Answer4_txtbx.setText(Answer4Text);
+        
+        // Set Correct Answer Radio buttons
+        Answer1_rdbtn.setEnabled(Answer1Correct);
+        Answer2_rdbtn.setEnabled(Answer2Correct);
+        Answer3_rdbtn.setEnabled(Answer3Correct);
+        Answer4_rdbtn.setEnabled(Answer4Correct);
+        
+        
+        
+        
         
         
         //QuestionText_txtbx.setEnabled(false);
