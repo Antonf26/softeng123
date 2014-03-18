@@ -7,6 +7,9 @@
 package GUIDesign;
 
 
+import Login.LoginPanel;
+import QuizApp.Core.User;
+import QuizApp.Core.User.UserType;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +19,22 @@ import javax.swing.*;
 public class GUI {
     
     private static JFrame MFrame;
+
+    /*
+    What we do upon successful user Login.
+    */
+    public static void handleLogIn(User newUser) {
+        
+        switch (user.utype){
+            case Student:
+                break;
+            case Lecturer:
+                break;
+            case ModuleLeader:
+                break;
+        }
+        
+    }
     private JPanel MPanel;
     private JPanel MPanel2;
     private JPanel MPanel3;
@@ -24,10 +43,12 @@ public class GUI {
     private JButton jButton3;
     private JButton jButton4;
     private JTextField jtField;
+    public static User user;
     private static Component e;
         
     public GUI(){
         gui();
+        //showLogin();
     }
     
     
@@ -100,7 +121,9 @@ public class GUI {
          *Add MPanel to the frame and apply settings for size and exiting
          */
         MFrame.add(MPanel, BorderLayout.WEST);
+        //MFrame.add(MPanel3, BorderLayout.EAST);
         MFrame.add(MPanel2, BorderLayout.NORTH);
+        
         MFrame.setVisible(true);
         MFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
         MFrame.setExtendedState(Frame.MAXIMIZED_BOTH); 
@@ -113,7 +136,7 @@ public class GUI {
       public void actionPerformed(ActionEvent actionEvent) {
         
         //MFrame.remove(e);
-        e = new NJP();
+        e = new LoginPanel();
         MFrame.add(e);
         MFrame.invalidate();
         MFrame.validate();
@@ -133,7 +156,7 @@ public class GUI {
         MFrame.repaint();
       }
     };
-      
+     
       
             /*
       ActionListener actionListener3 = new ActionListener() {
@@ -152,7 +175,22 @@ public class GUI {
       jButton2.addActionListener(actionListener2);
       //jButton2.addActionListener(actionListener1);
     }
+     /**
+      * Displays login panel;
+      */
+     private void showLogin()
+      {
         
+        e = new LoginPanel();
+        MPanel.setVisible(false);
+        
+        MFrame.add(e);
+        Dimension d = MFrame.getSize();
+        MFrame.invalidate();
+        MFrame.validate();
+        MFrame.repaint();
+      }
+      
     public static void main(String[] args) {
          GUI JF = new GUI();
          

@@ -6,6 +6,7 @@ import QuizApp.Core.Answer;
 import QuizApp.Core.Question;
 import QuizApp.Core.QuizResult;
 import QuizApp.Core.QuizResultRow;
+import QuizApp.Core.QuizStatistic;
 import java.sql.*;
 import QuizRunner.*;
 import QuizApp.Core.User;
@@ -27,10 +28,10 @@ try
 {
     
     /*
-    Remember to change quizAppDB to quizApp (for Dean)
+    Remember to change quizAppDB to quizApp (for Dean and possibly others)
     */
         Class.forName("org.apache.derby.jdbc.ClientDriver");
-        con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizApp", "test", "test");
+        con = DriverManager.getConnection("jdbc:derby://localhost:1527/quizAppdb", "test", "test");
         con.setAutoCommit(true);
 }
 catch (ClassNotFoundException ce)
@@ -129,7 +130,40 @@ catch (SQLException se)
                 }
         
     }
+    /**
+     * Returns array of quizzes that either do or don't have results recorded for the user.
+     * @param UserId - user Id for the user in question.
+     * @param Completed - true brings back quizzes with recorded results, false brings back quizzes without.
+     * @return 
+     */
     
+    public static Quiz[] getQuizzesbyUser(int UserId, boolean Completed)
+            {
+                try {
+        String query = String.format("SELECT * FROM QUIZ\n" +
+            "where quizid %s in (select quizid from quizresult where \n" +
+             "userid = %d)", Completed? " " : "not", UserId);
+        ResultSet rs = getQueryResults(query);
+        List<Quiz> quizzes = new ArrayList<Quiz>();
+        while (rs.next())
+        {
+            Quiz q = new Quiz(rs.getString("QUIZTITLE"), rs.getInt("QUIZID"));
+            q.timeLimit = rs.getInt("TimeAllowed");
+            q.available = rs.getBoolean("Available");
+            q.feedbackAvailable = rs.getBoolean("FeedbackAvailable");
+            q.timeOutBehaviour = rs.getInt("TimeOutBehaviour");
+            q.showPracticeQuestion = rs.getBoolean("ShowPracticeQuestion");
+            q.navigationEnabled = rs.getBoolean("NAVIGATIONENABLED");
+            q.randomiseQuestions = rs.getBoolean("RANDOMISEQUESTIONS");
+            quizzes.add(q);
+        }
+        return quizzes.toArray(new Quiz[quizzes.size()]);
+        }
+        catch(SQLException se)
+                {
+                    return null;
+                }
+            }
     /**
      * Gets a list of questions (with answers) given the quiz's DBId. Typical use may be to first get the quiz, and then call this,
      * assigning the result to Quiz.questionList/
@@ -190,23 +224,45 @@ catch (SQLException se)
     
     /**
      * Returns a list of question objects for ALL questions stored - useful for quiz generation I'd presume. 
-     * Optional ability to return only validated questions. 
+     *
      * @return 
      */
     public static List<Question> getAllQuestions()
     {
-        return getAllQuestions(false);
+              try
+        {
+            List<Question> allQuestions = new ArrayList<Question>();
+            String query = "Select QuestionId from Question";
+            
+            ResultSet rs = getQueryResults(query);
+            List<Integer> QuestionIds = new ArrayList<Integer>();
+            while (rs.next())
+            {
+                QuestionIds.add(rs.getInt("QuestionId"));
+            }
+            for (int qid : QuestionIds)
+            {
+                allQuestions.add(getQuestionData(qid));
+            }
+            return allQuestions;
+        }
+        catch (SQLException ex)
+        {
+            return null;
+        }
     }
-    public static List<Question> getAllQuestions(boolean OnlyValidated)
+    /**
+     * Retrieve questions of particular validation status 
+     * @param Validated: true returns all validated questions, false returns all non-validated questions
+     * @return List of Question Objects
+     */
+    public static List<Question> getAllQuestions(boolean Validated)
     {
         try
         {
             List<Question> allQuestions = new ArrayList<Question>();
             String query = "Select QuestionId from Question";
-            if (OnlyValidated)
-            {
-                query += " Where IsValidated = True";
-            }
+            query += String.format("Where is IsValidated = %s", String.valueOf(Validated) );
             ResultSet rs = getQueryResults(query);
             List<Integer> QuestionIds = new ArrayList<Integer>();
             while (rs.next())
@@ -434,13 +490,15 @@ catch (SQLException se)
         try
         {
             QuizResult qr = new QuizResult();
-            String statement = String.format("select  qr.questionid ,qr.ANSWERID, q.questiontext, qa.answertext, qa.iscorrect, qca.answertext as correctanswer\n" +
-"from quizresult qr\n" +
-"join question q on qr.QUESTIONID = q.QUESTIONID\n" +
-"join questionanswer qa on qr.QUESTIONID = qa.QUESTIONID and qr.ANSWERID = qa.ANSWERID\n" +
+            String statement = String.format("select  qq.questionid ,coalesce(qr.ANSWERID, 0) AnswerID, q.questiontext, coalesce(qr.answertext, 'NONE') ANSWERTEXT, coalesce(qr.iscorrect, false) ISCORRECT, qca.answertext as correctanswer\n" +
+"from quizquestion qq join question q on qq.QUESTIONID = q.QUESTIONID\n" +
+"left outer join (select iq.QUESTIONID, iq.ANSWERID, iqa.AnswerText, iqa.iscorrect from quizresult iq \n" +
+"join questionanswer iqa on iq.ANSWERID = iqa.ANSWERID and iq.QUESTIONID = iqa.QUESTIONID where userid = %d and quizid = %d) qr\n" +
+"on qq.QUESTIONID = qr.QUESTIONID\n" +
 "join (select answertext, questionid from questionanswer where iscorrect = true) qca\n" +
-"on qa.QUESTIONID = qca.questionid\n" +
-"where userid = %d and quizid = %d",  UserId, QuizId);
+"on qq.QUESTIONID = qca.questionid\n" +
+"where qq.quizid = %d" +
+"",  UserId, QuizId, QuizId);
             
             ResultSet rs = getQueryResults(statement);
             while (rs.next())
@@ -460,6 +518,25 @@ catch (SQLException se)
             return null;
         }
         
+    }
+    
+    public static QuizStatistic getQuizStatistic(int QuizId)
+    {
+        try
+        {
+        QuizStatistic qs = new QuizStatistic();
+        String statement = String.format("select distinct userid from quizresult where quizid = %d", QuizId);
+        ResultSet rs = getQueryResults(statement);
+        while (rs.next())
+        {
+            qs.quizResults.add(getQuizResult(QuizId, rs.getInt("USERID")));
+        }
+        return qs;
+        }
+        catch (SQLException xe)
+        {
+            return null;
+        }
     }
     ///Private methods below used to directly call to the db and return data if needed. 
     private static ResultSet getQueryResults(String query) throws SQLException
