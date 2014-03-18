@@ -11,6 +11,8 @@ import Helper.DbAccess;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,6 +30,9 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public boolean Answer2Correct = false;
     public boolean Answer3Correct = false;
     public boolean Answer4Correct = false;
+    public int QuestiondbId;
+    
+    public int i = 0;
 
     /**
      * Creates new form CreateQuestion
@@ -46,16 +51,51 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer3_rdbtn.addActionListener( this );
         Answer4_rdbtn.addActionListener( this );
         
-        //this.SetUp()
+        this.SetUp();
     }
     
-    /*public SetUp();
+    public void SetUp()
     {        
         // Get questions
-        DbAccess.getAllQuestions();
+        List<Question> allQuestions = DbAccess.getAllQuestions();
+        /*int numberQuestions = allQuestions.size();*/
         
-        return q
-    }*/
+        Question s = new Question();
+        s = allQuestions.get(i);
+        List<Answer> sanswers = s.answers;
+        
+        questionText = s.questionText;
+        QuestiondbId = s.dbId;
+        Answer1Text = sanswers.get(0).answerText;
+        Answer1Correct = sanswers.get(0).isCorrect;
+        Answer2Text = sanswers.get(1).answerText;
+        Answer2Correct = sanswers.get(1).isCorrect;
+        Answer3Text = sanswers.get(2).answerText;
+        Answer3Correct = sanswers.get(2).isCorrect;
+        Answer4Text = sanswers.get(3).answerText;
+        Answer4Correct = sanswers.get(3).isCorrect;
+        
+        // Display question and answer text
+        QuestionText_txtbx.setText(questionText);
+        Answer1_txtbx.setText(Answer1Text);
+        Answer2_txtbx.setText(Answer2Text);
+        Answer3_txtbx.setText(Answer3Text);
+        Answer4_txtbx.setText(Answer4Text);
+        
+        // Set Correct Answer Radio buttons
+        Answer1_rdbtn.setEnabled(Answer1Correct);
+        Answer2_rdbtn.setEnabled(Answer2Correct);
+        Answer3_rdbtn.setEnabled(Answer3Correct);
+        Answer4_rdbtn.setEnabled(Answer4Correct);
+        
+        
+        
+        
+        
+        
+        //QuestionText_txtbx.setEnabled(false);
+        
+    }
     
     @Override
     public void actionPerformed(ActionEvent evt)
@@ -82,8 +122,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
             else
             {
                 // Message box pop up to say please select correct answer
-                JOptionPane.showInputDialog("Please indicate correct answer");
-            
+                JOptionPane.showMessageDialog(null,"Please indicate correct answer.","Error",JOptionPane.WARNING_MESSAGE);
+                
             }
         }
         if(evt.getSource().equals(Next_btn))
@@ -134,6 +174,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         q.answers.add(new Answer(Answer2Text, Answer2Correct));
         q.answers.add(new Answer(Answer3Text, Answer3Correct));
         q.answers.add(new Answer(Answer4Text, Answer4Correct));
+        q.answers.get(0).answerText = Answer1Text;
+        
         
         DbAccess.UpdateQuestion(q);
     }
