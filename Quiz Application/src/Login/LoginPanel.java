@@ -114,7 +114,7 @@ public class LoginPanel extends javax.swing.JPanel {
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
        //Get entered username and password
-        String uName = UserNameField.getText();
+       String uName = UserNameField.getText();
        char[] pwd = PasswordField.getPassword();
        String pwds = new String(pwd);
        

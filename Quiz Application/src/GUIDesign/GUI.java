@@ -7,9 +7,12 @@
 package GUIDesign;
 
 
+import Helper.DbAccess;
 import Login.LoginPanel;
+import QuizApp.Core.Quiz;
 import QuizApp.Core.User;
 import QuizApp.Core.User.UserType;
+import QuizRunner.QuizTakingPanel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,9 +27,14 @@ public class GUI {
     What we do upon successful user Login.
     */
     public static void handleLogIn(User newUser) {
-        
+        user = newUser;
         switch (user.utype){
             case Student:
+                //just trying out the quiz here
+                Quiz q = DbAccess.getQuizzes()[0];
+                q.questionList = DbAccess.getQuizQuestions(q.quizDBId);
+                QuizTakingPanel qtp = new QuizTakingPanel(q);
+                loadPanel(qtp);
                 break;
             case Lecturer:
                 break;
@@ -190,6 +198,13 @@ public class GUI {
         MFrame.validate();
         MFrame.repaint();
       }
+     private static void loadPanel(JPanel Panel)
+     {
+         MFrame.add(Panel);
+         MFrame.invalidate();
+         MFrame.validate();
+         MFrame.repaint();
+     }
       
     public static void main(String[] args) {
          GUI JF = new GUI();

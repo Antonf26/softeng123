@@ -6,6 +6,24 @@
 
 package QuizRunner;
 
+import GUIDesign.GUI;
+import Helper.DbAccess;
+import QuizApp.Core.Answer;
+import QuizApp.Core.Question;
+import QuizApp.Core.Quiz;
+import QuizApp.Core.User;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.ButtonModel;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.Timer;
+
 /**
  *
  * @author Anton
@@ -15,9 +33,132 @@ public class QuizTakingPanel extends javax.swing.JPanel {
     /**
      * Creates new form QuizTakingPanel
      */
-    public QuizTakingPanel() {
+    public QuizTakingPanel(Quiz Quiz) {
+        quiz = Quiz;
         initComponents();
+        if (quiz.randomiseQuestions) 
+                {
+                    Collections.shuffle(quiz.questionList);
+                }
+        if (!quiz.navigationEnabled)
+        {
+            PrevBtn.setVisible(false);
+        }
+        qIndex = 0;
+        quiztimer = new Timer(1000, timerHit);
+        ShowQuestion(qIndex);
+        setVisible(true);
+        timeLeft = Quiz.timeLimit * 60;
+        user = GUI.user;
+        }
+    
+        private void startTimer()
+    {
+        
+        quiztimer.start();
+        
     }
+    ActionListener timerHit = new ActionListener(){
+        public void actionPerformed(ActionEvent evt){
+            timeLeft -= 1;
+            String timestring = String.format("%d : %d", timeLeft /60, timeLeft %60);
+            TimeLbl.setText(timestring);
+            if (timeLeft == 0)
+            {
+                quiztimer.stop();
+                performTimeOut();
+            }
+    }
+
+        private void performTimeOut() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    };
+    private void setResponse()
+    {
+        try{
+        ButtonModel bm = AnswerButtons.getSelection();
+        String selectedind = bm.getActionCommand();
+        
+        selectedAnswers.put(quiz.questionList.get(qIndex).dbId, Integer.parseInt(selectedind));
+        }
+        catch (NullPointerException npe)
+        {
+            //If no answer was selected, this gets thrown!! Catching it stops it breaking really.
+        }
+    }
+    private void ShowQuestion(int i) {
+        
+        Question cq = quiz.questionList.get(i);
+        QuestionPanel.removeAll();
+        AnswerButtons.clearSelection();
+        if (quiz.randomiseQuestions)
+        {
+            Collections.shuffle(cq.answers);
+        }
+        JLabel qtextLbl = new JLabel(cq.questionText);
+        qtextLbl.setSize(qtextLbl.getPreferredSize());
+        int ypos = 20;
+        qtextLbl.setLocation(0, ypos);
+        QuestionPanel.add(qtextLbl);
+        int ind = 0;
+        int selected = 0;
+        if (selectedAnswers.containsKey(cq.dbId))
+        {
+            selected = selectedAnswers.get(cq.dbId);
+        }
+        
+        for (Answer a : cq.answers)
+        {
+            ypos += 20;
+            JRadioButton jrb = new JRadioButton(a.answerText);
+            jrb.setSize(jrb.getPreferredSize());
+            jrb.setLocation(0, ypos);
+            jrb.getModel().setActionCommand(Integer.toString(a.dbId)); //this is how we can tell which answer was picked
+           
+            AnswerButtons.add(jrb);
+            QuestionPanel.add(jrb);
+             if(selected == a.dbId)
+            {
+                jrb.setSelected(true);
+            }
+            ind++;
+        }
+        QuestionPanel.setVisible(true);
+        QuestionPanel.repaint();
+        //setVisible(true);
+        qnumLbl.setText("Question " + Integer.toString(i + 1) + " of " + quiz.questionList.size());
+        if(!quiztimer.isRunning())
+        {
+            startTimer();
+        }
+        if(i==0)
+        {
+            PrevBtn.setEnabled(false);
+        }
+        else
+        {
+            PrevBtn.setEnabled(true);
+        }
+        
+        
+    }
+
+    private void saveResults() {
+        
+        Boolean saved = DbAccess.saveResults(quiz.quizDBId, selectedAnswers, user.dbId);
+        if (saved)
+        {
+            QuestionPanel.setBackground(Color.green);
+        }
+    }
+    
+    private Quiz quiz;
+    private int qIndex;
+    private User user;
+    private int timeLeft;
+    private Map<Integer, Integer> selectedAnswers = new HashMap<Integer, Integer>();
+    Timer quiztimer;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,19 +169,144 @@ public class QuizTakingPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        AnswerButtons = new javax.swing.ButtonGroup();
+        LeftPanel = new javax.swing.JPanel();
+        qnumLbl = new javax.swing.JLabel();
+        TimeLbl = new javax.swing.JLabel();
+        RightPanel = new javax.swing.JPanel();
+        PrevBtn = new javax.swing.JButton();
+        NextBtn = new javax.swing.JButton();
+        QuestionPanel = new javax.swing.JPanel();
+
+        qnumLbl.setText("jLabel2");
+
+        TimeLbl.setText("jLabel1");
+
+        javax.swing.GroupLayout LeftPanelLayout = new javax.swing.GroupLayout(LeftPanel);
+        LeftPanel.setLayout(LeftPanelLayout);
+        LeftPanelLayout.setHorizontalGroup(
+            LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LeftPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TimeLbl)
+                    .addComponent(qnumLbl))
+                .addContainerGap(153, Short.MAX_VALUE))
+        );
+        LeftPanelLayout.setVerticalGroup(
+            LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LeftPanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(TimeLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(qnumLbl)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        PrevBtn.setText("jButton1");
+        PrevBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrevBtnActionPerformed(evt);
+            }
+        });
+
+        NextBtn.setText("jButton2");
+        NextBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NextBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout QuestionPanelLayout = new javax.swing.GroupLayout(QuestionPanel);
+        QuestionPanel.setLayout(QuestionPanelLayout);
+        QuestionPanelLayout.setHorizontalGroup(
+            QuestionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 452, Short.MAX_VALUE)
+        );
+        QuestionPanelLayout.setVerticalGroup(
+            QuestionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 383, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout RightPanelLayout = new javax.swing.GroupLayout(RightPanel);
+        RightPanel.setLayout(RightPanelLayout);
+        RightPanelLayout.setHorizontalGroup(
+            RightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RightPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(PrevBtn)
+                .addGap(18, 18, 18)
+                .addComponent(NextBtn)
+                .addGap(42, 42, 42))
+            .addGroup(RightPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(QuestionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        RightPanelLayout.setVerticalGroup(
+            RightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, RightPanelLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(QuestionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                .addGroup(RightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PrevBtn)
+                    .addComponent(NextBtn))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(LeftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(RightPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 562, Short.MAX_VALUE)
+            .addComponent(LeftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(RightPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void PrevBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrevBtnActionPerformed
+
+        setResponse();
+        if(qIndex > 0)
+        {
+            ShowQuestion(qIndex - 1);
+            qIndex--;
+        }
+    }//GEN-LAST:event_PrevBtnActionPerformed
+
+    private void NextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextBtnActionPerformed
+        // TODO add your handling code here:
+        setResponse();
+     
+        //Show next question
+        if (qIndex < quiz.questionList.size() - 1)
+        {
+            qIndex++;
+            ShowQuestion(qIndex);
+        }
+        else
+        {
+            saveResults();
+        }
+    }//GEN-LAST:event_NextBtnActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup AnswerButtons;
+    private javax.swing.JPanel LeftPanel;
+    private javax.swing.JButton NextBtn;
+    private javax.swing.JButton PrevBtn;
+    private javax.swing.JPanel QuestionPanel;
+    private javax.swing.JPanel RightPanel;
+    private javax.swing.JLabel TimeLbl;
+    private javax.swing.JLabel qnumLbl;
     // End of variables declaration//GEN-END:variables
 }
