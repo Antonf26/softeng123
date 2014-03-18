@@ -23,3 +23,5 @@ public class QuizResultRow {
     public String selectedAnswerText;
     public boolean isCorrect;
 }
+
+

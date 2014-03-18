@@ -12,6 +12,7 @@ import QuizApp.Core.Question;
 import Helper.DbAccess;
 import QuizApp.Core.QuizResult;
 import QuizApp.Core.QuizResultRow;
+import QuizApp.Core.QuizStatistic;
 import Users.*;
 import QuizRunner.*;
 import java.util.ArrayList;
@@ -120,21 +121,26 @@ public class HomeFrm extends javax.swing.JFrame {
 //TESTING DB METHODS, REMOVE ME!
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-        List<Question> questions = DbAccess.getAllQuestions();
-        questions.size();
-        
-        
-        for (Question q : questions)
-        {
-            JOptionPane.showConfirmDialog(rootPane, q.questionText);
-        }
-        
-        QuizResult qr = DbAccess.getQuizResult(100, 1341131);
-        for (QuizResultRow qrr : qr.ResultRows)
-        {
-            String resultString = qrr.selectedAnswerText + qrr.correctAnswerText;
-            JOptionPane.showConfirmDialog(rootPane, resultString);
-        }
+//        List<Question> questions = DbAccess.getAllQuestions();
+//        questions.size();
+//        
+//        
+//        for (Question q : questions)
+//        {
+//            JOptionPane.showConfirmDialog(rootPane, q.questionText);
+//        }
+//        
+//        QuizResult qr = DbAccess.getQuizResult(100, 1341131);
+//        for (QuizResultRow qrr : qr.ResultRows)
+//        {
+//            String resultString = qrr.selectedAnswerText + qrr.correctAnswerText;
+//            JOptionPane.showConfirmDialog(rootPane, resultString);
+//        }
+        Quiz[] Quizzes = DbAccess.getQuizzesbyUser(1341131, true);
+        QuizStatistic qz = DbAccess.getQuizStatistic(Quizzes[0].quizDBId);
+        System.out.print(qz.AverageScore());
+        System.out.print(qz.maxScore());
+        System.out.print(qz.minScore());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
