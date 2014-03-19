@@ -38,10 +38,10 @@ public class GUI {
     private JPanel MPanel;
     private JPanel MPanel2;
     private JPanel MPanel3;
-    private JButton jButton1;
-    private JButton jButton2;
-    private JButton jButton3;
-    private JButton jButton4;
+    private JButton log_in;
+    private JButton QuizScreen;
+    private JButton Results;
+    private JButton Exit;
     private JTextField jtField;
     public static User user;
     private static Component e;
@@ -72,10 +72,10 @@ public class GUI {
         /*
          *Sets up Buttons
          */            
-        jButton1= new JButton("Log in Screen");
-        jButton2= new JButton("Take A Quiz");
-        jButton3= new JButton("View Results");
-        jButton4= new JButton("Exit");
+        log_in = new JButton("Log in Screen");
+        QuizScreen= new JButton("Take A Quiz");
+        Results= new JButton("View Results");
+        Exit= new JButton("Exit");
 
         /*
          *Sets up the text field and applies the settings below
@@ -103,16 +103,16 @@ public class GUI {
          */
         gbc.gridx = 0;
         gbc.gridy = 10;
-        MPanel.add(jButton1, gbc);
+        MPanel.add(log_in, gbc);
         gbc.gridx = 0;
         gbc.gridy = 20;
-        MPanel.add(jButton2, gbc);
+        MPanel.add(QuizScreen, gbc);
         gbc.gridx = 0;
         gbc.gridy = 30;
-        MPanel.add(jButton3, gbc);
+        MPanel.add(Results, gbc);
         gbc.gridx = 0;
         gbc.gridy = 40;
-        MPanel.add(jButton4, gbc);
+        MPanel.add(Exit, gbc);
         gbc.gridx = 0;
         gbc.gridy = 50;
         MPanel2.add(jtField);
@@ -125,24 +125,27 @@ public class GUI {
         MFrame.add(MPanel2, BorderLayout.NORTH);
         
         MFrame.setVisible(true);
-        MFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
         MFrame.setExtendedState(Frame.MAXIMIZED_BOTH); 
         MFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        //MFrame.pack();
-        
-      ActionListener actionListener1 = new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        
-        //MFrame.remove(e);
-        e = new LoginPanel();
-        MFrame.add(e);
-        MFrame.invalidate();
-        MFrame.validate();
-        MFrame.repaint();
-      }
-    };
+             
+      ActionListener actionListener1;
+        actionListener1 = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                
+                //MFrame.remove(e);
+                
+                
+                e = new LoginPanel();
+                e.setSize(600,600);
+                
+                MFrame.add(e);
+                MFrame.invalidate();
+                MFrame.validate();
+                MFrame.repaint();
+            }
+        };
       
       ActionListener actionListener2 = new ActionListener() {
       @Override
@@ -171,9 +174,9 @@ public class GUI {
       */
       
       
-      jButton1.addActionListener(actionListener1);
-      jButton2.addActionListener(actionListener2);
-      //jButton2.addActionListener(actionListener1);
+      log_in.addActionListener(actionListener1);
+      QuizScreen.addActionListener(actionListener2);
+      //QuizScreen.addActionListener(actionListener1);
     }
      /**
       * Displays login panel;
