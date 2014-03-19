@@ -30,9 +30,13 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public boolean Answer2Correct = false;
     public boolean Answer3Correct = false;
     public boolean Answer4Correct = false;
-    public int QuestiondbId;
-    
+    public int QuestionDbId;
+    public int Answer1DbId;
+    public int Answer2DbId;
+    public int Answer3DbId;
+    public int Answer4DbId;
     public int i = 0;
+    public int QuestionCount;
 
     /**
      * Creates new form CreateQuestion
@@ -58,22 +62,28 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     {        
         // Get questions
         List<Question> allQuestions = DbAccess.getAllQuestions();
-        /*int numberQuestions = allQuestions.size();*/
+        // creates values for size of list
+        QuestionCount = allQuestions.size();
         
         Question s = new Question();
         s = allQuestions.get(i);
         List<Answer> sanswers = s.answers;
         
+        // Assign values from the question to the variables
         questionText = s.questionText;
-        QuestiondbId = s.dbId;
+        QuestionDbId = s.dbId;
         Answer1Text = sanswers.get(0).answerText;
         Answer1Correct = sanswers.get(0).isCorrect;
+        Answer1DbId = sanswers.get(0).dbId;
         Answer2Text = sanswers.get(1).answerText;
         Answer2Correct = sanswers.get(1).isCorrect;
+        Answer2DbId = sanswers.get(1).dbId;
         Answer3Text = sanswers.get(2).answerText;
         Answer3Correct = sanswers.get(2).isCorrect;
+        Answer3DbId = sanswers.get(2).dbId;
         Answer4Text = sanswers.get(3).answerText;
         Answer4Correct = sanswers.get(3).isCorrect;
+        Answer4DbId = sanswers.get(3).dbId;
         
         // Display question and answer text
         QuestionText_txtbx.setText(questionText);
@@ -83,18 +93,26 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer4_txtbx.setText(Answer4Text);
         
         // Set Correct Answer Radio buttons
-        Answer1_rdbtn.setEnabled(Answer1Correct);
-        Answer2_rdbtn.setEnabled(Answer2Correct);
-        Answer3_rdbtn.setEnabled(Answer3Correct);
-        Answer4_rdbtn.setEnabled(Answer4Correct);
+        Answer1_rdbtn.setSelected(Answer1Correct);
+        Answer2_rdbtn.setSelected(Answer2Correct);
+        Answer3_rdbtn.setSelected(Answer3Correct);
+        Answer4_rdbtn.setSelected(Answer4Correct);
         
+        // Set Text Boxes to stop editing unless edit button is clicked
+        QuestionText_txtbx.setEnabled(false);
+        Answer1_txtbx.setEnabled(false);
+        Answer2_txtbx.setEnabled(false);
+        Answer3_txtbx.setEnabled(false);
+        Answer4_txtbx.setEnabled(false);
         
+        // Set radio buttons to stop editing unless edit button is clicked
+        Answer1_rdbtn.setEnabled(false);
+        Answer2_rdbtn.setEnabled(false);
+        Answer3_rdbtn.setEnabled(false);
+        Answer4_rdbtn.setEnabled(false);
         
-        
-        
-        
-        //QuestionText_txtbx.setEnabled(false);
-        
+        // Set Submit button as disabled to be changed when Edit_btn is clicked
+        Submit_btn.setEnabled(false);      
     }
     
     @Override
@@ -113,17 +131,20 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         }
         if(evt.getSource().equals(Edit_btn))
         {
+            //Button code here
+            this.EditQuestion();
+        }
+        if(evt.getSource().equals(Submit_btn))
+        {
             if(Answer1Correct || Answer2Correct || Answer3Correct || Answer4Correct)
             {
                 //BUTTON CODE HERE
-                this.EditQuestion();
-                
+                this.EditSubmit();       
             }
             else
             {
                 // Message box pop up to say please select correct answer
-                JOptionPane.showMessageDialog(null,"Please indicate correct answer.","Error",JOptionPane.WARNING_MESSAGE);
-                
+                JOptionPane.showMessageDialog(null,"Please indicate correct answer.","Error",JOptionPane.WARNING_MESSAGE); 
             }
         }
         if(evt.getSource().equals(Next_btn))
@@ -141,75 +162,117 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
 
     public void ApproveQuestion()
     {
-        // the question id for the question loaded in form
-        
-        //DbAccess.ToggleQuestionValidation(QDbId, true );
+        // Change the is validated field in the data base from false to true
+        DbAccess.ToggleQuestionValidation(QuestionDbId, true );
+        // Refresh the form
+        this.SetUp();
     }
     
     public void RejectQuestion()
     {
-        // the question id for the question loaded in form
-        
-        //DbAccess.ToggleQuestionRejected(QDbId, true );
+        // Change the is rejected field in the data base from false to true
+        DbAccess.ToggleQuestionRejection(QuestionDbId, true );
+        // Refresh the form
+        this.SetUp();
     }
     
     public void EditQuestion()
     {
-        // the question id for the question loaded in form
+        // Set Buttons enabled and disabled
+        Submit_btn.setEnabled(true);
+        Approve_btn.setEnabled(false);
+        Reject_btn.setEnabled(false);
+        Edit_btn.setEnabled(false);
         
+        // Set Text Boxes to enable editing once the edit button is clicked
+        QuestionText_txtbx.setEnabled(true);
+        Answer1_txtbx.setEnabled(true);
+        Answer2_txtbx.setEnabled(true);
+        Answer3_txtbx.setEnabled(true);
+        Answer4_txtbx.setEnabled(true);
         
-        // Set Values
-        questionText = QuestionText_txtbx.getText();
-        Answer1Text = Answer1_txtbx.getText();
-        Answer2Text = Answer2_txtbx.getText();
-        Answer3Text = Answer3_txtbx.getText();
-        Answer4Text = Answer4_txtbx.getText();
+        // Set radio buttons to enable editing once the edit button is clicked
+        Answer1_rdbtn.setEnabled(true);
+        Answer2_rdbtn.setEnabled(true);
+        Answer3_rdbtn.setEnabled(true);
+        Answer4_rdbtn.setEnabled(true);
+              
+    }
+    public void EditSubmit()
+    {
+       // Edit question
+        Question e = new Question();
+        List<Answer> eanswers = e.answers;
         
-        // Create question
-        Question q = new Question();
-        q.AuthorId = 1341131;
-        q.isRejected = false;
-        q.questionText = questionText;
-        q.answers.add(new Answer(Answer1Text, Answer1Correct)); 
-        q.answers.add(new Answer(Answer2Text, Answer2Correct));
-        q.answers.add(new Answer(Answer3Text, Answer3Correct));
-        q.answers.add(new Answer(Answer4Text, Answer4Correct));
-        q.answers.get(0).answerText = Answer1Text;
+        e.dbId = QuestionDbId;
+        e.AuthorId = 1341131;
+        e.isRejected = false;
+        e.isValidated = false;
+        e.questionText = QuestionText_txtbx.getText();
+        e.answers.get(0).dbId = Answer1DbId;
+        e.answers.get(0).answerText = Answer1_txtbx.getText();
+        e.answers.get(0).isCorrect = Answer1Correct;
+        e.answers.get(1).dbId = Answer2DbId;
+        e.answers.get(1).answerText = Answer2_txtbx.getText();
+        e.answers.get(1).isCorrect = Answer2Correct;
+        e.answers.get(2).dbId = Answer3DbId;
+        e.answers.get(2).answerText = Answer3_txtbx.getText();
+        e.answers.get(2).isCorrect = Answer3Correct;
+        e.answers.get(3).dbId = Answer4DbId;
+        e.answers.get(3).answerText = Answer4_txtbx.getText();
+        e.answers.get(3).isCorrect = Answer4Correct;
         
+        DbAccess.UpdateQuestion(e); 
         
-        DbAccess.UpdateQuestion(q);
+        this.SetUp();
     }
     
     public void NextQuestion()
     {
-        // the question id for the question loaded in form
-        
-        
-        // Current Question Id incremented by 1
-        
-        
-        // get question data
-        
+        if(QuestionCount == 1)
+        {
+            // Message box pop up
+            JOptionPane.showMessageDialog(null,"Only one question left to validate.","Error",JOptionPane.WARNING_MESSAGE);
+        }
+        else
+        {
+            if(i == QuestionCount -1 )
+            {
+                i = 0;
+            }
+            else
+            {
+                // Current Question Id incremented by 1
+                i++; 
+            }
+        }
         
         // Display question in form
-        
-        
+        this.SetUp();
     }
     
     public void PreviousQuestion()
-    {
-        // the question id for the question loaded in form
-        
-        
-        // Current Question Id decremented by 1
-        
-        
-        // get question data
-        
+    {   
+        if(QuestionCount == 1)
+        {
+            // Message box pop up
+                JOptionPane.showMessageDialog(null,"Only one question left to validate.","Error",JOptionPane.WARNING_MESSAGE);
+        }
+        else
+        {
+            if(i == 0)
+            {
+                i = QuestionCount -1;
+            }
+            else
+            {
+                // Current Question Id incremented by 1
+                i--; 
+            }
+        }
         
         // Display question in form
-        
-        
+        this.SetUp();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -248,6 +311,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Previous_btn = new javax.swing.JButton();
         Next_btn = new javax.swing.JButton();
         Answer3_lbl = new javax.swing.JLabel();
+        Submit_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Create Question");
@@ -333,64 +397,76 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer3_lbl.setText("Answer 3");
         Answer3_lbl.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
+        Submit_btn.setText("Submit");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(78, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(Previous_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Approve_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Edit_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Reject_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Next_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(Answer3_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(161, 161, 161)
-                                .addComponent(Answer4_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(AnswerDes_lbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(AnswerDes_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(102, 102, 102)
                                 .addComponent(Answer1_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(152, 152, 152)
-                                .addComponent(Answer2_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Answer2_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)))
                         .addGap(60, 60, 60))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Question_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(Title_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)))
-                        .addGap(112, 112, 112))
+                        .addGap(109, 109, 109)
+                        .addComponent(Answer3_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Answer4_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(74, 74, 74))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(Answer3_rdbtn)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(Question_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(Title_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(35, 35, 35)))
+                                .addGap(112, 112, 112))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(Previous_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(Answer1_rdbtn)
+                                .addComponent(Approve_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(11, 11, 11)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Answer2_rdbtn)
-                            .addComponent(Answer4_rdbtn))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane3)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(Edit_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Submit_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Reject_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Next_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(Answer3_rdbtn)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(Answer1_rdbtn)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(Answer2_rdbtn)
+                                        .addComponent(Answer4_rdbtn, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane3)
+                                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,49 +479,47 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(AnswerDes_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Answer1_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Answer2_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(Answer2_rdbtn))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(Answer1_rdbtn)
-                        .addGap(42, 42, 42)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Answer3_lbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addComponent(Answer1_rdbtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(Answer2_rdbtn))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Answer1_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Answer2_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Answer3_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Answer4_lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(Answer3_rdbtn)))
-                        .addGap(26, 26, 26))
+                            .addGap(26, 26, 26))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(Answer3_rdbtn)
+                            .addGap(64, 64, 64)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(Answer4_rdbtn)
-                        .addGap(64, 64, 64)))
+                        .addGap(61, 61, 61)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Previous_btn)
                     .addComponent(Approve_btn)
                     .addComponent(Edit_btn)
                     .addComponent(Reject_btn)
-                    .addComponent(Next_btn))
+                    .addComponent(Next_btn)
+                    .addComponent(Submit_btn))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -454,9 +528,8 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(158, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 48, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -553,6 +626,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     private javax.swing.JTextArea QuestionText_txtbx;
     private javax.swing.JLabel Question_lbl;
     private javax.swing.JButton Reject_btn;
+    private javax.swing.JButton Submit_btn;
     private javax.swing.JLabel Title_lbl;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
