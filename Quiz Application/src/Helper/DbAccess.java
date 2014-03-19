@@ -531,6 +531,7 @@ catch (SQLException se)
         {
             qs.quizResults.add(getQuizResult(QuizId, rs.getInt("USERID")));
         }
+        qs.populateQuestionStats();
         return qs;
         }
         catch (SQLException xe)

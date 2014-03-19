@@ -31,6 +31,7 @@ public class GUI {
         switch (user.utype){
             case Student:
                 //just trying out the quiz here
+                
                 Quiz q = DbAccess.getQuizzes()[0];
                 q.questionList = DbAccess.getQuizQuestions(q.quizDBId);
                 QuizTakingPanel qtp = new QuizTakingPanel(q);

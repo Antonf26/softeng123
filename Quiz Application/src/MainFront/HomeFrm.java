@@ -141,6 +141,8 @@ public class HomeFrm extends javax.swing.JFrame {
         System.out.print(qz.AverageScore());
         System.out.print(qz.maxScore());
         System.out.print(qz.minScore());
+        System.out.print(qz.bestQuestion());
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
