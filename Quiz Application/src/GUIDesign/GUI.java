@@ -28,6 +28,7 @@ public class GUI {
     */
     public static void handleLogIn(User newUser) {
         user = newUser;
+        removePanel();
         switch (user.utype){
             case Student:
                 //just trying out the quiz here
@@ -204,12 +205,25 @@ public class GUI {
       }
      private static void loadPanel(JPanel Panel)
      {
+         e = Panel;
          MFrame.add(Panel);
          MFrame.invalidate();
          MFrame.validate();
          MFrame.repaint();
      }
       
+     private static void removePanel()
+     {
+         MFrame.remove(e);
+         MFrame.invalidate();
+        MFrame.validate();
+        MFrame.repaint();
+     }
+     private void toggleButtons(boolean ButtonsShown)
+     {
+         MPanel.setVisible(ButtonsShown);
+         
+     }
     public static void main(String[] args) {
          GUI JF = new GUI();
          

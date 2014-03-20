@@ -50,6 +50,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Edit_btn.addActionListener( this );
         Next_btn.addActionListener( this );
         Previous_btn.addActionListener( this );
+        Submit_btn.addActionListener(this);
         Answer1_rdbtn.addActionListener( this );
         Answer2_rdbtn.addActionListener( this );
         Answer3_rdbtn.addActionListener( this );
@@ -61,7 +62,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     public void SetUp()
     {        
         // Get questions
-        List<Question> allQuestions = DbAccess.getAllQuestions();
+        List<Question> allQuestions = DbAccess.getAllQuestions(false);
         // creates values for size of list
         QuestionCount = allQuestions.size();
         
@@ -118,7 +119,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     @Override
     public void actionPerformed(ActionEvent evt)
     {
-       
+        System.out.print(evt.getSource());
         if(evt.getSource().equals(Approve_btn))
         {
             //BUTTON CODE HERE
@@ -209,20 +210,24 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         e.isRejected = false;
         e.isValidated = false;
         e.questionText = QuestionText_txtbx.getText();
-        e.answers.get(0).dbId = Answer1DbId;
-        e.answers.get(0).answerText = Answer1_txtbx.getText();
-        e.answers.get(0).isCorrect = Answer1Correct;
-        e.answers.get(1).dbId = Answer2DbId;
-        e.answers.get(1).answerText = Answer2_txtbx.getText();
-        e.answers.get(1).isCorrect = Answer2Correct;
-        e.answers.get(2).dbId = Answer3DbId;
-        e.answers.get(2).answerText = Answer3_txtbx.getText();
-        e.answers.get(2).isCorrect = Answer3Correct;
-        e.answers.get(3).dbId = Answer4DbId;
-        e.answers.get(3).answerText = Answer4_txtbx.getText();
-        e.answers.get(3).isCorrect = Answer4Correct;
+        e.answers.add(new Answer(Answer1_txtbx.getText(), Answer1Correct, Answer1DbId));
+        e.answers.add(new Answer(Answer2_txtbx.getText(), Answer2Correct, Answer2DbId));
+        e.answers.add(new Answer(Answer3_txtbx.getText(), Answer3Correct, Answer3DbId));
+        e.answers.add(new Answer(Answer4_txtbx.getText(), Answer4Correct, Answer4DbId));
+//        e.answers.get(0).dbId = Answer1DbId;
+//        e.answers.get(0).answerText = Answer1_txtbx.getText();
+//        e.answers.get(0).isCorrect = Answer1Correct;
+//        e.answers.get(1).dbId = Answer2DbId;
+//        e.answers.get(1).answerText = Answer2_txtbx.getText();
+//        e.answers.get(1).isCorrect = Answer2Correct;
+//        e.answers.get(2).dbId = Answer3DbId;
+//        e.answers.get(2).answerText = Answer3_txtbx.getText();
+//        e.answers.get(2).isCorrect = Answer3Correct;
+//        e.answers.get(3).dbId = Answer4DbId;
+//        e.answers.get(3).answerText = Answer4_txtbx.getText();
+//        e.answers.get(3).isCorrect = Answer4Correct;
         
-        DbAccess.UpdateQuestion(e); 
+        Boolean updated = DbAccess.UpdateQuestion(e); 
         
         this.SetUp();
     }

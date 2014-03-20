@@ -154,6 +154,7 @@ public class LoginPanel extends javax.swing.JPanel {
        { 
           GUI.handleLogIn(newUser);
           
+         
        }
        else
        {

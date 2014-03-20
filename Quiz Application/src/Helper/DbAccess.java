@@ -253,7 +253,8 @@ catch (SQLException se)
     }
     /**
      * Retrieve questions of particular validation status 
-     * @param Validated: true returns all validated questions, false returns all non-validated questions
+     * @param Validated: true returns all validated questions, false returns all non-validated questions.
+     * Doesn't return rejected questions!!!
      * @return List of Question Objects
      */
     public static List<Question> getAllQuestions(boolean Validated)
@@ -261,8 +262,8 @@ catch (SQLException se)
         try
         {
             List<Question> allQuestions = new ArrayList<Question>();
-            String query = "Select QuestionId from Question";
-            query += String.format("Where is IsValidated = %s", String.valueOf(Validated) );
+            String query = "Select QuestionId from Question ";
+            query += String.format("Where IsValidated = %s and IsRejected = False", String.valueOf(Validated) );
             ResultSet rs = getQueryResults(query);
             List<Integer> QuestionIds = new ArrayList<Integer>();
             while (rs.next())
@@ -327,7 +328,7 @@ catch (SQLException se)
     }
     
     /**
-     * Updates details of existing quesiton. (Note your quesiton object MUST already be populated with its dbId for this to work). Can add answers and edit existing ones!
+     * Updates details of existing question. (Note your question object MUST already be populated with its dbId for this to work). Can add answers and edit existing ones!
      * @param QuestionToUpdate - Takes a question object - will make the data on the db MATCH the state of the question object you pass to it. 
      * @return  boolean to indicate success/failure
      */
