@@ -65,6 +65,29 @@ public class QuizStatistic {
        }
        return "no statistics found!";
     }
+    
+    public String worstQuestion()
+    {
+        if(questionStats.size() > 0)
+        {
+            QuestionStatistic min = Collections.min(questionStats);
+            return min.questionText + ", " + min.correctAnswers + " times.";
+        }
+        return "no statistics found!";
+    }
+    /**
+     * Returns an array of percentage scores acheived by students for the quiz.
+     * @return 
+     */
+    public double[] getScores()
+    {
+        double[] scores = new double[quizResults.size()];
+        for (int i = 0; i < quizResults.size(); i++)
+        {
+            scores[i] = quizResults.get(i).PercentScore();
+        }
+        return scores;  
+    }
     /**
      * Populates the questionStats field - this holds a list of questionStatistic objects, listing quesiton texts and the number of times 
      * the questions were answered correctly
