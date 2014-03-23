@@ -45,7 +45,7 @@ public class GUI {
         }
         
     }
-    private JPanel MPanel;
+    private JPanel ButtonPanel;
     private JPanel MPanel2;
     private JPanel MPanel3;
     private JButton log_in;
@@ -72,8 +72,8 @@ public class GUI {
         /*
          *Sets the main panel up
          */
-        MPanel = new JPanel(new GridBagLayout());
-        MPanel.setBackground(Color.WHITE);
+        ButtonPanel = new JPanel(new GridBagLayout());
+        ButtonPanel.setBackground(Color.WHITE);
         MPanel2 = new JPanel();
         MPanel2.setBackground(Color.WHITE);
         MPanel3 = new JPanel();
@@ -113,24 +113,24 @@ public class GUI {
          */
         gbc.gridx = 0;
         gbc.gridy = 10;
-        MPanel.add(log_in, gbc);
+        ButtonPanel.add(log_in, gbc);
         gbc.gridx = 0;
         gbc.gridy = 20;
-        MPanel.add(QuizScreen, gbc);
+        ButtonPanel.add(QuizScreen, gbc);
         gbc.gridx = 0;
         gbc.gridy = 30;
-        MPanel.add(Results, gbc);
+        ButtonPanel.add(Results, gbc);
         gbc.gridx = 0;
         gbc.gridy = 40;
-        MPanel.add(Exit, gbc);
+        ButtonPanel.add(Exit, gbc);
         gbc.gridx = 0;
         gbc.gridy = 50;
         MPanel2.add(jtField);
 
         /*
-         *Add MPanel to the frame and apply settings for size and exiting
+         *Add ButtonPanel to the frame and apply settings for size and exiting
          */
-        MFrame.add(MPanel, BorderLayout.WEST);
+        MFrame.add(ButtonPanel, BorderLayout.WEST);
         //MFrame.add(MPanel3, BorderLayout.EAST);
         MFrame.add(MPanel2, BorderLayout.NORTH);
         
@@ -171,22 +171,21 @@ public class GUI {
     };
      
       
-            /*
+       
       ActionListener actionListener3 = new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
-        MFrame.add();
-        MFrame.invalidate();
-        MFrame.validate();
-        MFrame.repaint();
+        removePanel();
+        loadPanel(new Results.ResultPanel(100, 321));
+        
       }
     };
-      */
+    
       
       
       log_in.addActionListener(actionListener1);
       QuizScreen.addActionListener(actionListener2);
-      //QuizScreen.addActionListener(actionListener1);
+      Results.addActionListener(actionListener3);
     }
      /**
       * Displays login panel;
@@ -195,7 +194,7 @@ public class GUI {
       {
         
         e = new LoginPanel();
-        MPanel.setVisible(false);
+        ButtonPanel.setVisible(false);
         
         MFrame.add(e);
         Dimension d = MFrame.getSize();
@@ -221,7 +220,7 @@ public class GUI {
      }
      private void toggleButtons(boolean ButtonsShown)
      {
-         MPanel.setVisible(ButtonsShown);
+         ButtonPanel.setVisible(ButtonsShown);
          
      }
     public static void main(String[] args) {
