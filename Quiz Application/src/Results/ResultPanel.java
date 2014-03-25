@@ -6,27 +6,20 @@
 
 package Results;
 
-import java.sql.*;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import Helper.DbAccess;
 import Helper.DbAccess.*;
 import QuizApp.Core.QuizResult;
-import QuizApp.Core.User;
-import java.awt.BorderLayout;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 
 /**
  *
  * @author User
  */
 public class ResultPanel extends JPanel {
-    private String newline = "/n";
-
+   
     public ResultPanel() {
         
     }
@@ -38,17 +31,20 @@ public class ResultPanel extends JPanel {
        
        JTextArea question = new JTextArea();
        JScrollPane scroll = new JScrollPane(question);
-       question.setEditable(false);              
+       question.setEditable(false);   
+       add(scroll);
 
        
        QuizResult Results = DbAccess.getQuizResult(quizid, userid);
-       for(int i = 0; i < Results.ResultRows.size(); i++) { 
-            question.append(  "Question:\n" + Results.ResultRows.get(i).questionText + " \n"
+       double pecentage = Results.PercentScore();
+       question.append("Percentage = " + pecentage + "%");
+       
+       for(int i = 1; i < Results.ResultRows.size(); i++) { 
+            question.append(  "\n\nQuestion:\n" + Results.ResultRows.get(i).questionText + " \n"
                             + "Correct Answer: " + Results.ResultRows.get(i).correctAnswerText + "\n"
                             + "Selected Answer: " + Results.ResultRows.get(i).selectedAnswerText + "\n\n"
                             );            
-            add(scroll);
-                  
+                             
        }
    }
 }

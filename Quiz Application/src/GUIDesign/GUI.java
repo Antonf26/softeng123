@@ -211,12 +211,16 @@ public class GUI {
          MFrame.repaint();
      }
       
-     private static void removePanel()
-     {
-         MFrame.remove(e);
-         MFrame.invalidate();
-        MFrame.validate();
-        MFrame.repaint();
+     private static void removePanel() {
+        if(e == null){
+            return;
+        }else{
+            MFrame.remove(e);
+            MFrame.invalidate();
+            MFrame.validate();
+            MFrame.repaint();
+        }
+            
      }
      private void toggleButtons(boolean ButtonsShown)
      {
