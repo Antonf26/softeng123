@@ -10,10 +10,14 @@ import QuizApp.Core.Quiz;
 import QuizApp.Core.Answer;
 import QuizApp.Core.Question;
 import Helper.DbAccess;
+import QuizApp.Core.QuizResult;
+import QuizApp.Core.QuizResultRow;
+import QuizApp.Core.QuizStatistic;
 import Users.*;
 import QuizRunner.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Anton
@@ -116,15 +120,29 @@ public class HomeFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 //TESTING DB METHODS, REMOVE ME!
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Question q = new Question("Bla bla blabal?");
-        q.answers.add(new Answer("Bla", false));
-        q.answers.add(new Answer("Blehrhwh", true));
-        q.AuthorId= usr.dbId;
-        q.dbId = DbAccess.StoreNewQuestion(q);
-        List<Question> allQuestions = DbAccess.getAllQuestions();
-        List<Question> validatedOnly = DbAccess.getAllQuestions(true);
-        int qLength1 = allQuestions.size();
-        int qLength2 = validatedOnly.size();
+        
+//        List<Question> questions = DbAccess.getAllQuestions();
+//        questions.size();
+//        
+//        
+//        for (Question q : questions)
+//        {
+//            JOptionPane.showConfirmDialog(rootPane, q.questionText);
+//        }
+//        
+//        QuizResult qr = DbAccess.getQuizResult(100, 1341131);
+//        for (QuizResultRow qrr : qr.ResultRows)
+//        {
+//            String resultString = qrr.selectedAnswerText + qrr.correctAnswerText;
+//            JOptionPane.showConfirmDialog(rootPane, resultString);
+//        }
+        Quiz[] Quizzes = DbAccess.getQuizzesbyUser(1341131, true);
+        QuizStatistic qz = DbAccess.getQuizStatistic(Quizzes[0].quizDBId);
+        System.out.print(qz.AverageScore());
+        System.out.print(qz.maxScore());
+        System.out.print(qz.minScore());
+        System.out.print(qz.bestQuestion());
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

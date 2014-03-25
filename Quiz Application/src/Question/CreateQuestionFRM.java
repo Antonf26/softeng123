@@ -60,7 +60,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
             {
             
                 // Message box pop up to say please select correct answer
-                JOptionPane.showInputDialog("Please indicate correct answer");
+                JOptionPane.showMessageDialog(null,"Please indicate correct answer.","Error",JOptionPane.WARNING_MESSAGE);
             
             }
         }
@@ -148,6 +148,7 @@ public class CreateQuestionFRM extends javax.swing.JFrame implements ActionListe
         Answer1_lbl.setText("Answer 1");
 
         Answer1_txtbx.setColumns(20);
+        Answer1_txtbx.setLineWrap(true);
         Answer1_txtbx.setRows(5);
         jScrollPane2.setViewportView(Answer1_txtbx);
 
