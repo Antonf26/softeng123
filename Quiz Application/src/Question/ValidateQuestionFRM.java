@@ -113,7 +113,14 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Answer4_rdbtn.setEnabled(false);
         
         // Set Submit button as disabled to be changed when Edit_btn is clicked
-        Submit_btn.setEnabled(false);      
+        Submit_btn.setEnabled(false);  
+        
+        if(QuestionCount == 1)
+        {
+            // set Next and Previous button disabled
+            Next_btn.setEnabled(false);
+            Previous_btn.setEnabled(false);
+        }
     }
     
     @Override
@@ -203,7 +210,6 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     {
        // Edit question
         Question e = new Question();
-        List<Answer> eanswers = e.answers;
         
         e.dbId = QuestionDbId;
         e.AuthorId = 1341131;
@@ -214,18 +220,6 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         e.answers.add(new Answer(Answer2_txtbx.getText(), Answer2Correct, Answer2DbId));
         e.answers.add(new Answer(Answer3_txtbx.getText(), Answer3Correct, Answer3DbId));
         e.answers.add(new Answer(Answer4_txtbx.getText(), Answer4Correct, Answer4DbId));
-//        e.answers.get(0).dbId = Answer1DbId;
-//        e.answers.get(0).answerText = Answer1_txtbx.getText();
-//        e.answers.get(0).isCorrect = Answer1Correct;
-//        e.answers.get(1).dbId = Answer2DbId;
-//        e.answers.get(1).answerText = Answer2_txtbx.getText();
-//        e.answers.get(1).isCorrect = Answer2Correct;
-//        e.answers.get(2).dbId = Answer3DbId;
-//        e.answers.get(2).answerText = Answer3_txtbx.getText();
-//        e.answers.get(2).isCorrect = Answer3Correct;
-//        e.answers.get(3).dbId = Answer4DbId;
-//        e.answers.get(3).answerText = Answer4_txtbx.getText();
-//        e.answers.get(3).isCorrect = Answer4Correct;
         
         Boolean updated = DbAccess.UpdateQuestion(e); 
         
@@ -234,46 +228,30 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
     
     public void NextQuestion()
     {
-        if(QuestionCount == 1)
+        if(i == QuestionCount -1 )
         {
-            // Message box pop up
-            JOptionPane.showMessageDialog(null,"Only one question left to validate.","Error",JOptionPane.WARNING_MESSAGE);
+            i = 0;
         }
         else
         {
-            if(i == QuestionCount -1 )
-            {
-                i = 0;
-            }
-            else
-            {
-                // Current Question Id incremented by 1
-                i++; 
-            }
+            // Current Question Id incremented by 1
+            i++; 
         }
-        
+ 
         // Display question in form
         this.SetUp();
     }
     
     public void PreviousQuestion()
     {   
-        if(QuestionCount == 1)
+        if(i == 0)
         {
-            // Message box pop up
-                JOptionPane.showMessageDialog(null,"Only one question left to validate.","Error",JOptionPane.WARNING_MESSAGE);
+            i = QuestionCount -1;
         }
         else
         {
-            if(i == 0)
-            {
-                i = QuestionCount -1;
-            }
-            else
-            {
-                // Current Question Id incremented by 1
-                i--; 
-            }
+            // Current Question Id incremented by 1
+            i--; 
         }
         
         // Display question in form
@@ -319,7 +297,7 @@ public class ValidateQuestionFRM extends javax.swing.JFrame implements ActionLis
         Submit_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Create Question");
+        setTitle("Validate Question");
 
         QuestionText_txtbx.setColumns(20);
         QuestionText_txtbx.setRows(5);

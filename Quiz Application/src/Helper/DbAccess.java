@@ -369,7 +369,7 @@ catch (SQLException se)
     {
         try {
         String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,ISREJECTED,AUTHORID) ";
-        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.isRejected ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
+        statement += String.format("VALUES ('%s', %s, %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.isRejected ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
         int QuestionID = runStatementGetID(statement);
         int i= 1;
         statement = "INSERT INTO QUESTIONANSWER (QUESTIONID, ANSWERID, ANSWERTEXT, ISCORRECT) VALUES"; 
