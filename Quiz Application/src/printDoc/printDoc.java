@@ -2,6 +2,7 @@ package printDoc;
 
 import java.awt.print.PrinterException;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 /**
@@ -9,7 +10,7 @@ import javax.swing.JTextPane;
  * @author User
  */
 public class printDoc {
-    public printDoc(JTextPane e){
+    public printDoc(JTextArea e){
         try{
             boolean complete = e.print();
             if (complete){
