@@ -32,11 +32,9 @@ public class GUI {
         switch (user.utype){
             case Student:
                 //just trying out the quiz here
-                
-                Quiz q = DbAccess.getQuizzes()[0];
-                q.questionList = DbAccess.getQuizQuestions(q.quizDBId);
-                QuizTakingPanel qtp = new QuizTakingPanel(q);
-                loadPanel(qtp);
+                StudentGUIPanel student = new StudentGUIPanel();
+                loadButtonPanel(student);
+           
                 break;
             case Lecturer:
                 break;
@@ -45,13 +43,10 @@ public class GUI {
         }
         
     }
-    private JPanel ButtonPanel;
+
+    public static JPanel buttonpannel;
     private JPanel MPanel2;
     private JPanel MPanel3;
-    private JButton log_in;
-    private JButton QuizScreen;
-    private JButton Results;
-    private JButton Exit;
     private JTextField jtField;
     public static User user;
     private static Component e;
@@ -72,21 +67,12 @@ public class GUI {
         /*
          *Sets the main panel up
          */
-        ButtonPanel = new JPanel(new GridBagLayout());
-        ButtonPanel.setBackground(Color.WHITE);
+
         MPanel2 = new JPanel();
         MPanel2.setBackground(Color.WHITE);
         MPanel3 = new JPanel();
         MPanel3.setBackground(Color.BLACK);
         
-        /*
-         *Sets up Buttons
-         */            
-        log_in = new JButton("Log in Screen");
-        QuizScreen= new JButton("Take A Quiz");
-        Results= new JButton("View Results");
-        Exit= new JButton("Exit");
-
         /*
          *Sets up the text field and applies the settings below
          */    
@@ -96,42 +82,15 @@ public class GUI {
         jtField.setHorizontalAlignment(JTextField.RIGHT);
         jtField.setText("Cardiff Quiz Application");
         jtField.setBorder(null);
-
-        /*
-         *Activates GridBagConstraints 
-         * this is used for formating the layout of swing
-         */
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets= new Insets(10,10,5,5);
-        gbc.gridheight = 10;
-        gbc.gridwidth =  10;
-
-        /*
-         *Add items to the JPanel so they can be seen
-         *gbc are the positioning for the buttons
-         *they align virtically in MPanel1
-         */
-        gbc.gridx = 0;
-        gbc.gridy = 10;
-        ButtonPanel.add(log_in, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 20;
-        ButtonPanel.add(QuizScreen, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 30;
-        ButtonPanel.add(Results, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 40;
-        ButtonPanel.add(Exit, gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 50;
+        
         MPanel2.add(jtField);
 
         /*
          *Add ButtonPanel to the frame and apply settings for size and exiting
          */
-        MFrame.add(ButtonPanel, BorderLayout.WEST);
-        //MFrame.add(MPanel3, BorderLayout.EAST);
+        MFrame.add(e = new LoginPanel(), BorderLayout.CENTER);
+        
+ 
         MFrame.add(MPanel2, BorderLayout.NORTH);
         
         MFrame.setVisible(true);
@@ -144,48 +103,20 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 
-                //MFrame.remove(e);
+                removePanel();
                 
                 
                 e = new LoginPanel();
                 e.setSize(600,600);
                 
-                MFrame.add(e);
+                MFrame.add(new LoginPanel());
                 MFrame.invalidate();
                 MFrame.validate();
                 MFrame.repaint();
             }
         };
       
-      ActionListener actionListener2 = new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        
-        MFrame.remove(e);
-        e = new NJP2();
-        MFrame.add(e);
-        MFrame.invalidate();
-        MFrame.validate();
-        MFrame.repaint();
-      }
-    };
-     
-      
-       
-      ActionListener actionListener3 = new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        removePanel();
-        loadPanel(new Results.ResultPanel(100, 321));
-        
-      }
-    };
-    
-      
-      
-      log_in.addActionListener(actionListener1);
-      QuizScreen.addActionListener(actionListener2);
-      Results.addActionListener(actionListener3);
+ 
     }
      /**
       * Displays login panel;
@@ -194,7 +125,7 @@ public class GUI {
       {
         
         e = new LoginPanel();
-        ButtonPanel.setVisible(false);
+        //ButtonPanel.setVisible(false);
         
         MFrame.add(e);
         Dimension d = MFrame.getSize();
@@ -202,16 +133,27 @@ public class GUI {
         MFrame.validate();
         MFrame.repaint();
       }
-     private static void loadPanel(JPanel Panel)
+     static void loadPanel(JPanel Panel)
      {
          e = Panel;
          MFrame.add(Panel);
+         Panel.setSize(600, 600);
+         MFrame.invalidate();
+         MFrame.validate();
+         MFrame.repaint();
+     }
+     
+     static void loadButtonPanel(JPanel Panel)
+     {
+         buttonpannel = Panel;
+         MFrame.add(Panel, BorderLayout.WEST);
+         Panel.setSize(600, 600);
          MFrame.invalidate();
          MFrame.validate();
          MFrame.repaint();
      }
       
-     private static void removePanel() {
+     static void removePanel() {
         if(e == null){
             return;
         }else{
@@ -224,7 +166,7 @@ public class GUI {
      }
      private void toggleButtons(boolean ButtonsShown)
      {
-         ButtonPanel.setVisible(ButtonsShown);
+         //ButtonPanel.setVisible(ButtonsShown);
          
      }
     public static void main(String[] args) {
