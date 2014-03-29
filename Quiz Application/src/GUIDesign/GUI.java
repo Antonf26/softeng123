@@ -21,7 +21,7 @@ import javax.swing.*;
 
 public class GUI {
     
-    private static JFrame MFrame;
+    public static JFrame MFrame;
 
     /*
     What we do upon successful user Login.

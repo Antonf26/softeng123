@@ -6,6 +6,7 @@
 
 package GUIDesign;
 
+import static GUIDesign.GUI.MFrame;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,7 +22,6 @@ import javax.swing.JPanel;
  * @author User
  */
 public class StudentGUIPanel extends JPanel {
-    private JButton log_in;
     private JButton QuizScreen;
     private JButton Results;
     private JButton Exit;
@@ -33,8 +33,6 @@ public class StudentGUIPanel extends JPanel {
         /*
          *Sets up Buttons
          */
-        
-        log_in = new JButton("Log in Screen");
         QuizScreen= new JButton("Take A Quiz");
         Results= new JButton("View Results");
         Exit= new JButton("Exit");
@@ -63,12 +61,20 @@ public class StudentGUIPanel extends JPanel {
                GUI.loadPanel(new Results.ResultPanel(100, 321));
             }
         };
+        
+        ActionListener actionListener4 = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+               MFrame.dispose();
+            }
+        };
     
       
       
       //log_in.addActionListener(actionListener1);
       QuizScreen.addActionListener(actionListener2);
       Results.addActionListener(actionListener3);
+      Exit.addActionListener(actionListener4);
     }
     
     
