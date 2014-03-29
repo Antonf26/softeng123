@@ -10,15 +10,12 @@ import javax.swing.JPanel;
 import Helper.DbAccess;
 import Helper.DbAccess.*;
 import QuizApp.Core.QuizResult;
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 
 /**
@@ -27,20 +24,19 @@ import javax.swing.JToolBar;
  */
 public class ResultPanel extends JPanel {
    
-    public ResultPanel() {
-        
-    }
-    
     public ResultPanel(int quizid, int userid){
         
+        /*
+         * Creates a toolbar with a print button
+         */
         JToolBar toolbar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         JButton printbutton = new JButton("Print");
         toolbar.add(printbutton);
         this.add(toolbar);
         
-        /*
-         * Layout for the panel, to align on the Y_AXIS (virtically)
-         */
+       /*
+        * Layout for the panel, to align on the Y_AXIS (virtically)
+        */
        BoxLayout boxlayout1 = new BoxLayout(this, BoxLayout.Y_AXIS);
        setLayout(boxlayout1);
        
@@ -62,27 +58,32 @@ public class ResultPanel extends JPanel {
        double pecentage = Results.PercentScore();
        double totalcorrect = Results.NumberCorrect();
        double numberofquestions = Results.TotalQuestions();
-       
-       question.append("Percentage = " + pecentage + "%");
-       question.append("\nTotal = " + totalcorrect + "/" + numberofquestions);
-       
+              
        /*
+        * The first part appends the scores and percentage achieved by the student
+        *
         * The loop below gets the questions from the array Results.ResultRow
         * for each item in the array it will put the question text, the correct answer
         * and the answer the user has selected.
         */
+       question.append("Percentage = " + pecentage + "%");
+       question.append("\nTotal = " + totalcorrect + "/" + numberofquestions);
+       
        for(int i = 1; i < Results.ResultRows.size(); i++) { 
             question.append(  "\n\nQuestion:\n" + Results.ResultRows.get(i).questionText + " \n"
                             + "Correct Answer: " + Results.ResultRows.get(i).correctAnswerText + "\n"
                             + "Selected Answer: " + Results.ResultRows.get(i).selectedAnswerText + "\n\n"
-                            );            
-                             
+                            );                
        }
        
+       /*
+        * Action to print when the button in the toolbar is pushed
+        * it will print the questions in the text area
+        */
        printbutton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                printDoc.printDoc Print = new printDoc.printDoc(question);
+                printDoc.printDoc print = new printDoc.printDoc(question);
             }
         });
    }
