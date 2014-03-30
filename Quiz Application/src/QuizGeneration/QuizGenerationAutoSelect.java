@@ -17,16 +17,6 @@ import java.util.Random;
  * @author dean
  */
 public class QuizGenerationAutoSelect {
-    {public static void main(String []args)
-            /*
-            Insert selection here
-            */
-    {public void (Auto auto)
-            /*
-            Declare auto as a word to be used when tagging random questions
-            */
-    }
-
-}
+   
     
 }

@@ -130,6 +130,41 @@ catch (SQLException se)
                 }
         
     }
+    
+    /**
+     * Gets quiz object given a dbID
+     * @param quizId
+     * @return 
+     */
+    public static Quiz getQuiz(int quizId)
+    {
+        try {
+            String query = String.format("SELECT * FROM QUIZ");
+        ResultSet rs = getQueryResults(query);
+        Quiz q;
+        if (rs.next())
+        {
+            q = new Quiz(rs.getString("QUIZTITLE"), rs.getInt("QUIZID"));
+            q.timeLimit = rs.getInt("TimeAllowed");
+            q.available = rs.getBoolean("Available");
+            q.feedbackAvailable = rs.getBoolean("FeedbackAvailable");
+            q.timeOutBehaviour = rs.getInt("TimeOutBehaviour");
+            q.showPracticeQuestion = rs.getBoolean("ShowPracticeQuestion");
+            q.navigationEnabled = rs.getBoolean("NAVIGATIONENABLED");
+            q.randomiseQuestions = rs.getBoolean("RANDOMISEQUESTIONS");
+            q.questionList = getQuizQuestions(q.quizDBId);
+            return q;
+            
+        }
+            return null;
+        }
+        catch(SQLException se)
+                {
+                    return null;
+                }
+            
+        
+    }
     /**
      * Returns array of quizzes that either do or don't have results recorded for the user.
      * @param UserId - user Id for the user in question.
@@ -369,7 +404,7 @@ catch (SQLException se)
     {
         try {
         String statement = "INSERT INTO QUESTION (QUESTIONTEXT, ISVALIDATED,ISREJECTED,AUTHORID) ";
-        statement += String.format("VALUES ('%s', %s, %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.isRejected ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
+        statement += String.format("VALUES ('%s', %s, %d)", QuestionToStore.questionText, QuestionToStore.isValidated ? "TRUE" : "FALSE", QuestionToStore.isRejected ? "TRUE" : "FALSE", QuestionToStore.AuthorId);
         int QuestionID = runStatementGetID(statement);
         int i= 1;
         statement = "INSERT INTO QUESTIONANSWER (QUESTIONID, ANSWERID, ANSWERTEXT, ISCORRECT) VALUES"; 
