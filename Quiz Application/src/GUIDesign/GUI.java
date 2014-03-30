@@ -37,8 +37,12 @@ public class GUI {
            
                 break;
             case Lecturer:
+                LecturerGUIPanel lecturer = new LecturerGUIPanel();
+                loadButtonPanel(lecturer);
                 break;
             case ModuleLeader:
+                ModuleLeaderGUIPanel moduleLeader = new ModuleLeaderGUIPanel();
+                loadButtonPanel(moduleLeader);
                 break;
         }
         
