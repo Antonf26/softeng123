@@ -156,8 +156,15 @@ public class GUI {
          MFrame.validate();
          MFrame.repaint();
      }
+     public static void toggleButtonPanel(boolean makeVisible)
+     {
+         buttonpannel.setVisible(makeVisible);
+         MFrame.invalidate();
+         MFrame.validate();
+         MFrame.repaint();
+     }
       
-     static void removePanel() {
+     public static void removePanel() {
         if(e == null){
             return;
         }else{

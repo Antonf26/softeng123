@@ -64,7 +64,7 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         
         Question s = new Question();
         s = allQuestions.get(i);
-        List<Answer> sanswers = s.answers;
+        List<Answer> sanswers = s.answers; 
         
         // Assign values from the question to the variables
         questionText = s.questionText;

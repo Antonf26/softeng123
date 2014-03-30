@@ -14,6 +14,7 @@ import QuizApp.Core.Quiz;
 import QuizApp.Core.User;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -47,6 +49,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         user = GUI.user; //retrieving currently logged in user
         ShowQuizChoice();
         setVisible(true);
+        GUI.toggleButtonPanel(false);
         
         }
     
@@ -56,6 +59,10 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         private void startTimer()
         {
             quiztimer.start();   
+        }
+        private void stopTimer()
+        {
+            quiztimer.stop();
         }
         
         /**
@@ -383,23 +390,31 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         
         JPanel qcPanel = new JPanel();
         qcPanel.setSize(600, 600);
-        
+        qcPanel.setLayout(null);
         TimeLbl.setVisible(false);
         qnumLbl.setVisible(false);
+        NextBtn.setVisible(false);
+        PrevBtn.setVisible(false);
         Quiz[] availableQuizzes = getQuizzes();
         if (availableQuizzes.length > 0)
         {
             int l = 100;
+            JLabel availableLabel = new JLabel("The following quizzes are available to take:");
+            availableLabel.setLocation(100, 70);
+            availableLabel.setSize(availableLabel.getPreferredSize());
+            qcPanel.add(availableLabel);
             for (Quiz q : availableQuizzes)
             {
+                l += 50;
                 JLabel qnLabel = new JLabel();
                 qnLabel.setText(q.quizTitle);
                 JButton qButton = new JButton("Take Quiz");
                 qButton.setActionCommand(Integer.toString(q.quizDBId));
                 qButton.addActionListener(quizChoiceListener);
-                qnLabel.setLabelFor(qButton);
-                qButton.setLocation(l, 50);
-                l += 20;
+                qnLabel.setSize(qnLabel.getPreferredSize());
+                qnLabel.setLocation(100, l);
+                qButton.setLocation(110 + qnLabel.getWidth(), l);
+                qButton.setSize(qButton.getPreferredSize());
                 qcPanel.add(qButton);
                 qcPanel.add(qnLabel);
                 
@@ -593,6 +608,9 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         submitted.setText("Your results have been saved!");
         submitted.setSize(submitted.getPreferredSize());
         submitted.setLocation(100, 100);
+        qnumLbl.setVisible(false);
+        TimeLbl.setVisible(false);
+        stopTimer();
         QuestionPanel.add(submitted);
         if (quiz.feedbackAvailable)
         {
@@ -604,6 +622,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         }
         QuestionPanel.repaint();
         QuestionPanel.setVisible(true);
+        GUI.toggleButtonPanel(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

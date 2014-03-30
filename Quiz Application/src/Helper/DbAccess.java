@@ -139,7 +139,7 @@ catch (SQLException se)
     public static Quiz getQuiz(int quizId)
     {
         try {
-            String query = String.format("SELECT * FROM QUIZ");
+            String query = String.format("SELECT * FROM QUIZ where quizid = %d", quizId);
         ResultSet rs = getQueryResults(query);
         Quiz q;
         if (rs.next())
