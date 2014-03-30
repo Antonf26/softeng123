@@ -136,8 +136,7 @@ public class GUI {
      static void loadPanel(JPanel Panel)
      {
          e = Panel;
-         MFrame.add(Panel);
-         Panel.setSize(600, 600);
+         MFrame.add(Panel, BorderLayout.CENTER);
          MFrame.invalidate();
          MFrame.validate();
          MFrame.repaint();
