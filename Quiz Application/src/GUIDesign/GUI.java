@@ -137,7 +137,7 @@ public class GUI {
         MFrame.validate();
         MFrame.repaint();
       }
-     static void loadPanel(JPanel Panel)
+    public static void loadPanel(JPanel Panel)
      {
          e = Panel;
          MFrame.add(Panel, BorderLayout.CENTER);
@@ -146,7 +146,7 @@ public class GUI {
          MFrame.repaint();
      }
      
-     static void loadButtonPanel(JPanel Panel)
+    public static void loadButtonPanel(JPanel Panel)
      {
          buttonpannel = Panel;
          MFrame.add(Panel, BorderLayout.WEST);

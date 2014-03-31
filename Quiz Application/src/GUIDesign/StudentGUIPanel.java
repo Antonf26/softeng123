@@ -8,7 +8,6 @@ package GUIDesign;
 
 import static GUIDesign.GUI.MFrame;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,11 +53,13 @@ public class StudentGUIPanel extends JPanel {
      
       
        
-        ActionListener actionListener3 = new ActionListener() {
+        ActionListener actionListener3;
+        actionListener3 = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               GUI.removePanel();
-               GUI.loadPanel(new Results.ResultPanel(100, GUI.user.dbId));
+                GUI.removePanel();
+                Results.QuizesTaken panel = new Results.QuizesTaken(GUI.user.dbId);
+                GUI.loadPanel(panel.completeQuizes);
             }
         };
         

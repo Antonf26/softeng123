@@ -68,8 +68,10 @@ public class ResultPanel extends JPanel {
         */
        question.append("Percentage = " + pecentage + "%");
        question.append("\nTotal = " + totalcorrect + "/" + numberofquestions);
+       System.out.println(Results.ResultRows.size());
        
-       for(int i = 1; i < Results.ResultRows.size(); i++) { 
+       for(int i = 0; i < Results.ResultRows.size(); i++) { 
+            System.out.println(Results.ResultRows.size());
             question.append(  "\n\nQuestion:\n" + Results.ResultRows.get(i).questionText + " \n"
                             + "Correct Answer: " + Results.ResultRows.get(i).correctAnswerText + "\n"
                             + "Selected Answer: " + Results.ResultRows.get(i).selectedAnswerText + "\n\n"
