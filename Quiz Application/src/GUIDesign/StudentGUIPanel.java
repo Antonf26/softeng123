@@ -58,7 +58,7 @@ public class StudentGUIPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                GUI.removePanel();
-               GUI.loadPanel(new Results.ResultPanel(100, 321));
+               GUI.loadPanel(new Results.ResultPanel(100, GUI.user.dbId));
             }
         };
         

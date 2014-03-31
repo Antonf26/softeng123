@@ -240,7 +240,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         public void actionPerformed(ActionEvent evt)
         {
             int quizId = Integer.parseInt(evt.getActionCommand());
-            quiz = DbAccess.getQuiz(quizId);
+            //quiz = DbAccess.getQuiz();
             takeQuiz();
     
         }
