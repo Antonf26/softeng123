@@ -1,7 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * This is the panel for showing all the quizes the user has completed
+ * it will then allow you to see which quizes are available to view the results
+ * in the event no quizes have been completed it will prompt you to take a quiz
  */
 
 package Results;
@@ -19,57 +19,84 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-/**
- *
- * @author User
- */
 public class QuizesTaken{
     public static JPanel completeQuizes;
-    
-   public QuizesTaken(final int dbId) {
-               
-        /*
-        * Layout for the panel, to align on the Y_AXIS (virtically)
-        */
-        completeQuizes = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        BoxLayout boxlayout1 = new BoxLayout(completeQuizes, BoxLayout.Y_AXIS);
-        completeQuizes.setLayout(boxlayout1);
+
+    public QuizesTaken(final int dbId) {
 
         /*
-        * Creates the scrollbar and textarea, and adds some formattign for the panel
-        */
-        JScrollPane scroll = new JScrollPane(completeQuizes);
-        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        JLabel mainLabel =new JLabel("Results Available to View");
+         * Add the Pane; and then creates the
+         * Layout for the panel, to align on the Y_AXIS (virtically)
+         */
+        completeQuizes = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        BoxLayout quizListlayout = new BoxLayout(completeQuizes, BoxLayout.Y_AXIS);
+        completeQuizes.setLayout(quizListlayout);
         
+        //Creates the scrollbar and textarea, and adds some formatting for the completeQuizesScroll
+        JScrollPane completeQuizesScroll = new JScrollPane(completeQuizes);
+        completeQuizesScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        JLabel mainLabel =new JLabel("Results Available to View");
+       
         completeQuizes.add(mainLabel);
         completeQuizes.add(Box.createRigidArea(new Dimension(5,30)));
-        
-        final Quiz[] quiz = DbAccess.getQuizzesbyUser(dbId, true);
-        for(int i = 0; i < quiz.length; i++){
-               final int quizid = quiz[i].quizDBId;
-               String title = quiz[i].quizDBId + " - " + quiz[i].quizTitle; 
-               JLabel lblTitle = new JLabel(title);
-               JButton viewresults = new JButton("View Results");
-               completeQuizes.add(lblTitle);
-               completeQuizes.add(viewresults);
-               completeQuizes.add(Box.createRigidArea(new Dimension(5,30)));
-               
-               
-               
-            ActionListener actionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                
-                GUIDesign.GUI.removePanel();
-                GUIDesign.GUI.loadPanel(new ResultPanel(dbId, quizid));
-                }
-            };
 
-          //log_in.addActionListener(actionListener1);
-          viewresults.addActionListener(actionListener);
+        // This gets the completed quizes from the db an puts it into an array
+        Quiz[] quizArray = DbAccess.getQuizzesbyUser(dbId, true);
+        
+        /*
+         * This if statment is to check if the user has completed any quizes
+         * if the user hasn't completed any it will have an array length of 0
+         * and perform the action in the if statment
+         *
+         * If the array length is greater than 0 it will perform the else statment
+         * which creates the Buttons to view feedback for each quiz completed
+         */
+        if(quizArray.length == 0){
             
+            // creates a label indicating that no quizes have been completed
+            JLabel noCompletedQuizLabel = new JLabel("***You have not completed any Quizes, "
+                                                    + "please click on take quiz***");
+            completeQuizes.add(noCompletedQuizLabel);
+            
+        }else{
+            
+            //this loop is for getting the infromation out of the array
+            for(int i = 0; i < quizArray.length; i++){
+
+                // Create a string from quizDBId and quizTitle to in
+                String labelTitle = quizArray[i].quizDBId + " - " + quizArray[i].quizTitle;
+                
+                //Creates a lable with the quiz information
+                JLabel quizTitleLabel = new JLabel(labelTitle);
+                
+                //Creates a button to view the results for this quiz
+                JButton viewResultsButton = new JButton("View Results");
+                
+                //This is so the quizDBId is passed to the action listner below
+                viewResultsButton.setActionCommand(Integer.toString(quizArray[i].quizDBId));
+                
+                //add the quizTitleLabel and viewResultsButton to the panel  
+                //the Box.createRigidArea adds space after each item
+                completeQuizes.add(quizTitleLabel);
+                completeQuizes.add(viewResultsButton);
+                completeQuizes.add(Box.createRigidArea(new Dimension(5,30)));
+
+
+            ActionListener viewResultsListener = new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent evt){
+                    //Gets the interger from the setActionCommand above
+                    int quizId = Integer.parseInt(evt.getActionCommand());
+                    
+                    //Call the removePanel removal and loadPanel to load the results
+                    GUIDesign.GUI.removePanel();
+                    GUIDesign.GUI.loadPanel(new ResultPanel(dbId, quizId));
+                    }
+                };
+
+                viewResultsButton.addActionListener(viewResultsListener);
+
+            }
         }
     }
-    
 }
