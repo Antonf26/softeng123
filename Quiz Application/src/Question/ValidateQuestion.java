@@ -58,67 +58,98 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         // Get questions
         List<Question> allQuestions = DbAccess.getAllQuestions(false);
         // creates values for size of list
-        //QuestionCount = allQuestions.size();
+        QuestionCount = allQuestions.size();
         
-        /*
-        Question s = new Question();
-     
-        s = allQuestions.get(i);
-        List<Answer> sanswers = s.answers;
-        
-        
-        // Assign values from the question to the variables
-        questionText = s.questionText;
-        QuestionDbId = s.dbId;
-        Answer1Text = sanswers.get(0).answerText;
-        Answer1Correct = sanswers.get(0).isCorrect;
-        Answer1DbId = sanswers.get(0).dbId;
-        Answer2Text = sanswers.get(1).answerText;
-        Answer2Correct = sanswers.get(1).isCorrect;
-        Answer2DbId = sanswers.get(1).dbId;
-        Answer3Text = sanswers.get(2).answerText;
-        Answer3Correct = sanswers.get(2).isCorrect;
-        Answer3DbId = sanswers.get(2).dbId;
-        Answer4Text = sanswers.get(3).answerText;
-        Answer4Correct = sanswers.get(3).isCorrect;
-        Answer4DbId = sanswers.get(3).dbId;
-        
-        */
-        
-        // Display question and answer text
-        QuestionText_txtbx.setText(questionText);
-        Answer1_txtbx.setText(Answer1Text);
-        Answer2_txtbx.setText(Answer2Text);
-        Answer3_txtbx.setText(Answer3Text);
-        Answer4_txtbx.setText(Answer4Text);
-        
-        // Set Correct Answer Radio buttons
-        Answer1_rdbtn.setSelected(Answer1Correct);
-        Answer2_rdbtn.setSelected(Answer2Correct);
-        Answer3_rdbtn.setSelected(Answer3Correct);
-        Answer4_rdbtn.setSelected(Answer4Correct);
-        
-        // Set Text Boxes to stop editing unless edit button is clicked
-        QuestionText_txtbx.setEnabled(false);
-        Answer1_txtbx.setEnabled(false);
-        Answer2_txtbx.setEnabled(false);
-        Answer3_txtbx.setEnabled(false);
-        Answer4_txtbx.setEnabled(false);
-        
-        // Set radio buttons to stop editing unless edit button is clicked
-        Answer1_rdbtn.setEnabled(false);
-        Answer2_rdbtn.setEnabled(false);
-        Answer3_rdbtn.setEnabled(false);
-        Answer4_rdbtn.setEnabled(false);
-        
-        // Set Submit button as disabled to be changed when Edit_btn is clicked
-        Submit_btn.setEnabled(false);  
-        
-        if(QuestionCount == 1)
+        if(QuestionCount == 0)
         {
-            // set Next and Previous button disabled
+            // Set Values
+            QuestionText_txtbx.setText("No questions to validate");
+            Answer1_txtbx.setText("N/A");
+            Answer2_txtbx.setText("N/A");
+            Answer3_txtbx.setText("N/A");
+            Answer4_txtbx.setText("N/A");
+
+            // set buttons and text boxes disabled
             Next_btn.setEnabled(false);
             Previous_btn.setEnabled(false);
+            Submit_btn.setEnabled(false);
+            Approve_btn.setEnabled(false);
+            Reject_btn.setEnabled(false);
+            Edit_btn.setEnabled(false);
+            QuestionText_txtbx.setEnabled(false);
+            Answer1_txtbx.setEnabled(false);
+            Answer2_txtbx.setEnabled(false);
+            Answer3_txtbx.setEnabled(false);
+            Answer4_txtbx.setEnabled(false);
+            Answer1_rdbtn.setEnabled(false);
+            Answer2_rdbtn.setEnabled(false);
+            Answer3_rdbtn.setEnabled(false);
+            Answer4_rdbtn.setEnabled(false);
+            
+            // Message box pop up to say please select correct answer
+            JOptionPane.showMessageDialog(null,"There are no more questions to validate.",
+                                          "No Questions to Validate",JOptionPane.WARNING_MESSAGE);
+        }
+        
+        else
+        {
+            Question s = new Question();
+     
+            s = allQuestions.get(i);
+            List<Answer> sanswers = s.answers;
+        
+        
+            // Assign values from the question to the variables
+            questionText = s.questionText;
+            QuestionDbId = s.dbId;
+            Answer1Text = sanswers.get(0).answerText;
+            Answer1Correct = sanswers.get(0).isCorrect;
+            Answer1DbId = sanswers.get(0).dbId;
+            Answer2Text = sanswers.get(1).answerText;
+            Answer2Correct = sanswers.get(1).isCorrect;
+            Answer2DbId = sanswers.get(1).dbId;
+            Answer3Text = sanswers.get(2).answerText;
+            Answer3Correct = sanswers.get(2).isCorrect;
+            Answer3DbId = sanswers.get(2).dbId;
+            Answer4Text = sanswers.get(3).answerText;
+            Answer4Correct = sanswers.get(3).isCorrect;
+            Answer4DbId = sanswers.get(3).dbId;
+        
+            // Display question and answer text
+            QuestionText_txtbx.setText(questionText);
+            Answer1_txtbx.setText(Answer1Text);
+            Answer2_txtbx.setText(Answer2Text);
+            Answer3_txtbx.setText(Answer3Text);
+            Answer4_txtbx.setText(Answer4Text);
+        
+            // Set Correct Answer Radio buttons
+            Answer1_rdbtn.setSelected(Answer1Correct);
+            Answer2_rdbtn.setSelected(Answer2Correct);
+            Answer3_rdbtn.setSelected(Answer3Correct);
+            Answer4_rdbtn.setSelected(Answer4Correct);
+        
+            // Set Text Boxes to stop editing unless edit button is clicked
+            QuestionText_txtbx.setEnabled(false);
+            Answer1_txtbx.setEnabled(false);
+            Answer2_txtbx.setEnabled(false);
+            Answer3_txtbx.setEnabled(false);
+            Answer4_txtbx.setEnabled(false);
+        
+            // Set radio buttons to stop editing unless edit button is clicked
+            Answer1_rdbtn.setEnabled(false);
+            Answer2_rdbtn.setEnabled(false);
+            Answer3_rdbtn.setEnabled(false);
+            Answer4_rdbtn.setEnabled(false);
+        
+            // Set Submit button as disabled to be changed when Edit_btn is clicked
+            Submit_btn.setEnabled(false);  
+        
+            if(QuestionCount == 1)
+            {
+                // set Next and Previous button disabled
+                Next_btn.setEnabled(false);
+                Previous_btn.setEnabled(false);
+            }
         }
     }
     
@@ -205,6 +236,7 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         Answer4_rdbtn.setEnabled(true);
               
     }
+    
     public void EditSubmit()
     {
        // Edit question
