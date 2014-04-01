@@ -28,6 +28,7 @@ public class GUI {
     */
     public static void handleLogIn(User newUser) {
         user = newUser;
+        jtField.setText(jtField.getText() + "| Logged in as: " + newUser.fullName);
         removePanel();
         switch (user.utype){
             case Student:
@@ -51,7 +52,7 @@ public class GUI {
     public static JPanel buttonpannel;
     private JPanel MPanel2;
     private JPanel MPanel3;
-    private JTextField jtField;
+    private static JTextField jtField;
     public static User user;
     private static Component e;
         

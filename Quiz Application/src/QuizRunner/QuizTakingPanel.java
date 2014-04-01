@@ -74,6 +74,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
            InfoPane.setSize(500, 500);
            InfoPane.setLocation(10, 10);
            InfoPane.setEditable(false);
+           InfoPane.setEnabled(false);
            InfoPane.setText("THIS IS A WARNING");
            JButton StartButton = new JButton();
            StartButton.setText("Start Quiz");
@@ -146,6 +147,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         
         private void displayPracticeQuestion(){
             ShowQuestion(practiceQuestion, true);
+            
             JOptionPane.showMessageDialog(RightPanel, "This is how question in the quiz will appear \n"
                     + "You select an answer by clicking the radio button next to it \n"
                     + "You can try it on this question - the resutls won't be evaluated or stored \n"
