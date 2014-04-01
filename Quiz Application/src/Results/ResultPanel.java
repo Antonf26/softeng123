@@ -54,7 +54,7 @@ public class ResultPanel extends JPanel {
         * the intergers below get the percentage, total marks and 
         * number of questions to be put into the text pane
         */
-       QuizResult Results = DbAccess.getQuizResult(quizid, userid);
+       QuizResult Results = DbAccess.getQuizResult(userid, quizid);
        double pecentage = Results.PercentScore();
        double totalcorrect = Results.NumberCorrect();
        double numberofquestions = Results.TotalQuestions();
