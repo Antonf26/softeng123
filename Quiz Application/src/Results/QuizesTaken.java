@@ -60,8 +60,6 @@ public class QuizesTaken{
             ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               System.out.println(dbId);
-               System.out.println(quizid);
                 
                 GUIDesign.GUI.removePanel();
                 GUIDesign.GUI.loadPanel(new ResultPanel(dbId, quizid));
