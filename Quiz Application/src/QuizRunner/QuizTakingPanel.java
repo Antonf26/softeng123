@@ -49,7 +49,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         user = GUI.user; //retrieving currently logged in user
         ShowQuizChoice();
         setVisible(true);
-        GUI.toggleButtonPanel(false);
+        //GUI.toggleButtonPanel(false);
         
         }
     
@@ -240,7 +240,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         public void actionPerformed(ActionEvent evt)
         {
             int quizId = Integer.parseInt(evt.getActionCommand());
-            //quiz = DbAccess.getQuiz();
+            quiz = DbAccess.getQuiz(quizId);
             takeQuiz();
     
         }
@@ -423,6 +423,8 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         else 
         {
             JLabel noQLabel = new JLabel("No Quizzes Available");
+            noQLabel.setSize(noQLabel.getPreferredSize());
+            noQLabel.setLocation(100, 70);
             qcPanel.add(noQLabel);
         }
         QuestionPanel.add(qcPanel);
