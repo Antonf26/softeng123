@@ -85,7 +85,19 @@ public class CreateQuestion extends javax.swing.JPanel implements ActionListener
         q.answers.add(new Answer(Answer4Text, Answer4Correct));
         
         // Update database
-        DbAccess.StoreNewQuestion(q);
+        int newId = DbAccess.StoreNewQuestion(q);
+        
+        if (newId > 0)
+        {
+            //SUCCESS
+            q.dbId = newId;
+        }
+        else
+        {
+            //FAIL
+        }
+        
+        
  
     }
     /**
