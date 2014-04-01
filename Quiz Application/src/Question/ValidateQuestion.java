@@ -50,10 +50,10 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         Answer3_rdbtn.addActionListener( this );
         Answer4_rdbtn.addActionListener( this );
         
-        this.SetUp();
+        this.setUp();
     }
     
-    public void SetUp()
+    public void setUp()
     {        
         // Get questions
         List<Question> allQuestions = DbAccess.getAllQuestions(false);
@@ -160,24 +160,24 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         if(evt.getSource().equals(Approve_btn))
         {
             //BUTTON CODE HERE
-            this.ApproveQuestion();
+            this.approveQuestion();
         }
         if(evt.getSource().equals(Reject_btn))
         {
             //BUTTON CODE HERE
-            this.RejectQuestion();
+            this.rejectQuestion();
         }
         if(evt.getSource().equals(Edit_btn))
         {
             //Button code here
-            this.EditQuestion();
+            this.editQuestion();
         }
         if(evt.getSource().equals(Submit_btn))
         {
             if(Answer1Correct || Answer2Correct || Answer3Correct || Answer4Correct)
             {
                 //BUTTON CODE HERE
-                this.EditSubmit();       
+                this.editSubmit();       
             }
             else
             {
@@ -188,33 +188,33 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         if(evt.getSource().equals(Next_btn))
         {
             //BUTTON CODE HERE
-            this.NextQuestion();
+            this.nextQuestion();
         }
         if(evt.getSource().equals(Previous_btn))
         {
             //BUTTON CODE HERE
-            this.PreviousQuestion();
+            this.previousQuestion();
         }
              
     }
 
-    public void ApproveQuestion()
+    public void approveQuestion()
     {
         // Change the is validated field in the data base from false to true
         DbAccess.ToggleQuestionValidation(QuestionDbId, true );
         // Refresh the form
-        this.SetUp();
+        this.setUp();
     }
     
-    public void RejectQuestion()
+    public void rejectQuestion()
     {
         // Change the is rejected field in the data base from false to true
         DbAccess.ToggleQuestionRejection(QuestionDbId, true );
         // Refresh the form
-        this.SetUp();
+        this.setUp();
     }
     
-    public void EditQuestion()
+    public void editQuestion()
     {
         // Set Buttons enabled and disabled
         Submit_btn.setEnabled(true);
@@ -237,7 +237,7 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
               
     }
     
-    public void EditSubmit()
+    public void editSubmit()
     {
        // Edit question
         Question e = new Question();
@@ -254,10 +254,10 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         
         Boolean updated = DbAccess.UpdateQuestion(e); 
         
-        this.SetUp();
+        this.setUp();
     }
     
-    public void NextQuestion()
+    public void nextQuestion()
     {
         if(i == QuestionCount -1 )
         {
@@ -270,10 +270,10 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         }
  
         // Display question in form
-        this.SetUp();
+        this.setUp();
     }
     
-    public void PreviousQuestion()
+    public void previousQuestion()
     {   
         if(i == 0)
         {
@@ -286,7 +286,7 @@ public class ValidateQuestion extends javax.swing.JPanel implements ActionListen
         }
         
         // Display question in form
-        this.SetUp();
+        this.setUp();
     }
 
     /**
