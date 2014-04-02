@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * this Module contains the main GUI frame to which all the panels are added an 
+ * removed as needed for the application to work. 
  */
 
 package GUIDesign;
@@ -21,27 +20,29 @@ import javax.swing.*;
 
 public class GUI {
     
-    public static JFrame MFrame;
+    public static JFrame mainFrame;
 
     /*
-    What we do upon successful user Login.
-    */
+     * What we do upon successful user Login.
+     */
     public static void handleLogIn(User newUser) {
         user = newUser;
-        jtField.setText(jtField.getText() + "| Logged in as: " + newUser.fullName);
+        titleField.setText(titleField.getText() + "| Logged in as: " + newUser.fullName);
         removePanel();
         switch (user.utype){
             case Student:
-                //just trying out the quiz here
+                //Load the Student StudentGUIPanel
                 StudentGUIPanel student = new StudentGUIPanel();
                 loadButtonPanel(student);
            
                 break;
             case Lecturer:
+                //Load the Student LecturerGUIPanel
                 LecturerGUIPanel lecturer = new LecturerGUIPanel();
                 loadButtonPanel(lecturer);
                 break;
             case ModuleLeader:
+                //Load the Student ModuleLeaderGUIPanel
                 ModuleLeaderGUIPanel moduleLeader = new ModuleLeaderGUIPanel();
                 loadButtonPanel(moduleLeader);
                 break;
@@ -50,15 +51,13 @@ public class GUI {
     }
 
     public static JPanel buttonpannel;
-    private JPanel MPanel2;
-    private JPanel MPanel3;
-    private static JTextField jtField;
+    private JPanel titlePanel;
+    private static JTextField titleField;
     public static User user;
     private static Component e;
         
     public GUI(){
         gui();
-        //showLogin();
     }
     
     
@@ -67,40 +66,37 @@ public class GUI {
         /*
          *Create JFrame and apply settings for size and exiting
          */
-        MFrame = new JFrame();
+        mainFrame = new JFrame();
 
         /*
          *Sets the main panel up
          */
 
-        MPanel2 = new JPanel();
-        MPanel2.setBackground(Color.WHITE);
-        MPanel3 = new JPanel();
-        MPanel3.setBackground(Color.BLACK);
+        titlePanel = new JPanel();
+        titlePanel.setBackground(Color.WHITE);
         
         /*
          *Sets up the text field and applies the settings below
          */    
-        jtField = new JTextField();
-        jtField.setEditable(false);
-        jtField.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jtField.setHorizontalAlignment(JTextField.RIGHT);
-        jtField.setText("Cardiff Quiz Application");
-        jtField.setBorder(null);
+        titleField = new JTextField();
+        titleField.setEditable(false);
+        titleField.setFont(new java.awt.Font("Tahoma", 0, 12));
+        titleField.setHorizontalAlignment(JTextField.RIGHT);
+        titleField.setText("Cardiff Quiz Application");
+        titleField.setBorder(null);
         
-        MPanel2.add(jtField);
+        titlePanel.add(titleField);
 
         /*
          *Add ButtonPanel to the frame and apply settings for size and exiting
          */
-        MFrame.add(e = new LoginPanel(), BorderLayout.CENTER);
+        mainFrame.add(e = new LoginPanel(), BorderLayout.CENTER);
         
  
-        MFrame.add(MPanel2, BorderLayout.NORTH);
-        
-        MFrame.setVisible(true);
-        MFrame.setExtendedState(Frame.MAXIMIZED_BOTH); 
-        MFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.add(titlePanel, BorderLayout.NORTH);
+        mainFrame.setVisible(true);
+        mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH); 
+        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
              
       ActionListener actionListener1;
@@ -114,10 +110,10 @@ public class GUI {
                 e = new LoginPanel();
                 e.setSize(600,600);
                 
-                MFrame.add(new LoginPanel());
-                MFrame.invalidate();
-                MFrame.validate();
-                MFrame.repaint();
+                mainFrame.add(new LoginPanel());
+                mainFrame.invalidate();
+                mainFrame.validate();
+                mainFrame.repaint();
             }
         };
       
@@ -132,46 +128,46 @@ public class GUI {
         e = new LoginPanel();
         //ButtonPanel.setVisible(false);
         
-        MFrame.add(e);
-        Dimension d = MFrame.getSize();
-        MFrame.invalidate();
-        MFrame.validate();
-        MFrame.repaint();
+        mainFrame.add(e);
+        Dimension d = mainFrame.getSize();
+        mainFrame.invalidate();
+        mainFrame.validate();
+        mainFrame.repaint();
       }
     public static void loadPanel(JPanel Panel)
      {
          e = Panel;
-         MFrame.add(Panel, BorderLayout.CENTER);
-         MFrame.invalidate();
-         MFrame.validate();
-         MFrame.repaint();
+         mainFrame.add(Panel, BorderLayout.CENTER);
+         mainFrame.invalidate();
+         mainFrame.validate();
+         mainFrame.repaint();
      }
      
     public static void loadButtonPanel(JPanel Panel)
      {
          buttonpannel = Panel;
-         MFrame.add(Panel, BorderLayout.WEST);
+         mainFrame.add(Panel, BorderLayout.WEST);
          Panel.setSize(600, 600);
-         MFrame.invalidate();
-         MFrame.validate();
-         MFrame.repaint();
+         mainFrame.invalidate();
+         mainFrame.validate();
+         mainFrame.repaint();
      }
      public static void toggleButtonPanel(boolean makeVisible)
      {
          buttonpannel.setVisible(makeVisible);
-         MFrame.invalidate();
-         MFrame.validate();
-         MFrame.repaint();
+         mainFrame.invalidate();
+         mainFrame.validate();
+         mainFrame.repaint();
      }
       
      public static void removePanel() {
         if(e == null){
             return;
         }else{
-            MFrame.remove(e);
-            MFrame.invalidate();
-            MFrame.validate();
-            MFrame.repaint();
+            mainFrame.remove(e);
+            mainFrame.invalidate();
+            mainFrame.validate();
+            mainFrame.repaint();
         }
             
      }
@@ -182,13 +178,5 @@ public class GUI {
      }
     public static void main(String[] args) {
          GUI JF = new GUI();
-         
-         /*
-          * as can be seen i have made MFrame static so that we can use it in outside
-          * of the main method. this will allow us to set up action buttons to change
-          * to whichever panel we will then be able to import panels created using 
-          * netbeans GUI designing tools
-          */
-         //MFrame.add(new NJP());
     }
 }

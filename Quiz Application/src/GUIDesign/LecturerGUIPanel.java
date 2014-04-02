@@ -6,7 +6,7 @@
 
 package GUIDesign;
 
-import static GUIDesign.GUI.MFrame;
+import static GUIDesign.GUI.mainFrame;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -65,7 +65,7 @@ public class LecturerGUIPanel extends JPanel {
         ActionListener actionListener4 = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               MFrame.dispose();
+               mainFrame.dispose();
             }
         };
     
