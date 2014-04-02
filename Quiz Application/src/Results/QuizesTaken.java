@@ -70,7 +70,7 @@ public class QuizesTaken{
                 JLabel quizTitleLabel = new JLabel(labelTitle);
                 
                 //Creates a button to view the results for this quiz
-                JButton viewResultsButton = new JButton("View Results");
+                JButton viewResultsButton = new JButton("View Results for this Quiz");
                 
                 //This is so the quizDBId is passed to the action listner below
                 viewResultsButton.setActionCommand(Integer.toString(quizArray[i].quizDBId));
