@@ -1,30 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
  */
 
 package Results;
 
-import javax.swing.JPanel;
 import Helper.DbAccess;
-import Helper.DbAccess.*;
 import QuizApp.Core.QuizResult;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 
-/**
- *
- * @author User
- */
 public class ResultPanel extends JPanel {
    
-    public ResultPanel(int quizid, int userid){
+    public ResultPanel(int userid, int quizid){
         
         /*
          * Creates a toolbar with a print button
@@ -54,8 +48,9 @@ public class ResultPanel extends JPanel {
         * the intergers below get the percentage, total marks and 
         * number of questions to be put into the text pane
         */
-       QuizResult Results = DbAccess.getQuizResult(userid, quizid);
+       QuizResult Results = DbAccess.getQuizResult(quizid,userid);
        double pecentage = Results.PercentScore();
+       DecimalFormat percentageFormat = new DecimalFormat("#.00");
        double totalcorrect = Results.NumberCorrect();
        double numberofquestions = Results.TotalQuestions();
               
@@ -66,15 +61,15 @@ public class ResultPanel extends JPanel {
         * for each item in the array it will put the question text, the correct answer
         * and the answer the user has selected.
         */
-       question.append("Percentage = " + pecentage + "%");
+       question.append("Percentage = " + percentageFormat.format(pecentage) + "%");
        question.append("\nTotal = " + totalcorrect + "/" + numberofquestions);
-       System.out.println(Results.ResultRows.size());
-       
+              
        for(int i = 0; i < Results.ResultRows.size(); i++) { 
             question.append(  "\n\nQuestion:\n" + Results.ResultRows.get(i).questionText + " \n"
                             + "Correct Answer: " + Results.ResultRows.get(i).correctAnswerText + "\n"
                             + "Selected Answer: " + Results.ResultRows.get(i).selectedAnswerText + "\n\n"
-                            );                
+                            );
+            System.out.println(Results.ResultRows.size());
        }
        
        /*

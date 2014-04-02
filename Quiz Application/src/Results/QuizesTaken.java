@@ -95,7 +95,6 @@ public class QuizesTaken{
                 };
 
                 viewResultsButton.addActionListener(viewResultsListener);
-
             }
         }
     }
