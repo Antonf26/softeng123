@@ -8,7 +8,6 @@ import QuizApp.Core.QuizResult;
 import QuizApp.Core.QuizResultRow;
 import QuizApp.Core.QuizStatistic;
 import java.sql.*;
-import QuizRunner.*;
 import QuizApp.Core.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +106,7 @@ catch (SQLException se)
     public static Quiz[] getQuizzes()
     {
         try {
+            
         String query = String.format("SELECT * FROM QUIZ");
         ResultSet rs = getQueryResults(query);
         List<Quiz> quizzes = new ArrayList<Quiz>();
@@ -121,7 +121,9 @@ catch (SQLException se)
             q.navigationEnabled = rs.getBoolean("NAVIGATIONENABLED");
             q.randomiseQuestions = rs.getBoolean("RANDOMISEQUESTIONS");
             quizzes.add(q);
+           
         }
+        
         return quizzes.toArray(new Quiz[quizzes.size()]);
         }
         catch(SQLException se)

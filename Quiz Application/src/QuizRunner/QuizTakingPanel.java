@@ -49,7 +49,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         user = GUI.user; //retrieving currently logged in user
         ShowQuizChoice();
         setVisible(true);
-        GUI.toggleButtonPanel(false);
+        //GUI.toggleButtonPanel(false);
         
         }
     
@@ -74,6 +74,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
            InfoPane.setSize(500, 500);
            InfoPane.setLocation(10, 10);
            InfoPane.setEditable(false);
+           InfoPane.setEnabled(false);
            InfoPane.setText("THIS IS A WARNING");
            JButton StartButton = new JButton();
            StartButton.setText("Start Quiz");
@@ -146,6 +147,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         
         private void displayPracticeQuestion(){
             ShowQuestion(practiceQuestion, true);
+            
             JOptionPane.showMessageDialog(RightPanel, "This is how question in the quiz will appear \n"
                     + "You select an answer by clicking the radio button next to it \n"
                     + "You can try it on this question - the resutls won't be evaluated or stored \n"
@@ -240,7 +242,7 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         public void actionPerformed(ActionEvent evt)
         {
             int quizId = Integer.parseInt(evt.getActionCommand());
-            //quiz = DbAccess.getQuiz();
+            quiz = DbAccess.getQuiz(quizId);
             takeQuiz();
     
         }
@@ -423,6 +425,8 @@ public class QuizTakingPanel extends javax.swing.JPanel {
         else 
         {
             JLabel noQLabel = new JLabel("No Quizzes Available");
+            noQLabel.setSize(noQLabel.getPreferredSize());
+            noQLabel.setLocation(100, 70);
             qcPanel.add(noQLabel);
         }
         QuestionPanel.add(qcPanel);

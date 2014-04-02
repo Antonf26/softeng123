@@ -25,6 +25,7 @@ public class ModuleLeaderGUIPanel extends JPanel {
     private JButton CreateQuestionButton;
     private JButton ValidateQuestionButton;
     private JButton ViewStatsButton;
+    private JButton CreateQuizButton;
     private JButton Exit;
     
     ModuleLeaderGUIPanel(){
@@ -37,12 +38,15 @@ public class ModuleLeaderGUIPanel extends JPanel {
         CreateQuestionButton = new JButton("Create Question");
         ViewStatsButton = new JButton("View Statistics");
         ValidateQuestionButton = new JButton("Validate Question");
+        CreateQuizButton = new JButton("Create Quiz");
         Exit= new JButton("Exit");
 
         add(Box.createRigidArea(new Dimension(5,100)));
         add(CreateQuestionButton);
         add(Box.createRigidArea(new Dimension(5,10)));
         add(ValidateQuestionButton);
+        add(Box.createRigidArea(new Dimension(5,10)));
+        add(CreateQuizButton);
         add(Box.createRigidArea(new Dimension(5,10)));
         add(ViewStatsButton);
         add(Box.createRigidArea(new Dimension(5,400)));
@@ -79,6 +83,13 @@ public class ModuleLeaderGUIPanel extends JPanel {
                 GUI.loadPanel(new Question.ValidateQuestion());
             }
         };
+     ActionListener actionListener6 = new ActionListener() {
+         @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+               GUI.removePanel();
+                GUI.loadPanel(new QuizGeneration.QuizGenerationForm());
+            }
+     };
     
       
       
@@ -86,6 +97,7 @@ public class ModuleLeaderGUIPanel extends JPanel {
       CreateQuestionButton.addActionListener(actionListener2);
       ViewStatsButton.addActionListener(actionListener3);
       ValidateQuestionButton.addActionListener(actionListener5);
+      CreateQuizButton.addActionListener(actionListener6);
       Exit.addActionListener(actionListener4);
     }
     

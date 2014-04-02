@@ -19,10 +19,10 @@ public class QuizStatistic {
     public QuizStatistic()
     {
     }
-    public List<QuizResult> quizResults = new ArrayList<>();
+    public List<QuizResult> quizResults = new ArrayList<QuizResult>();
     public String QuizTitle;
     public int QuizId;
-    public List<QuestionStatistic> questionStats = new ArrayList<>(); 
+    public List<QuestionStatistic> questionStats = new ArrayList<QuestionStatistic>(); 
     /**
      * Returns average percentage score attained by students on the quiz
      * @return 

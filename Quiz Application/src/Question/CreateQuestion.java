@@ -57,7 +57,8 @@ public class CreateQuestion extends javax.swing.JPanel implements ActionListener
             {
             
                 // Message box pop up to say please select correct answer
-                JOptionPane.showMessageDialog(null,"Please indicate correct answer.","Error",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null,"Please indicate correct answer.",
+                                            "Error",JOptionPane.WARNING_MESSAGE);
             
             }
         }
@@ -85,8 +86,36 @@ public class CreateQuestion extends javax.swing.JPanel implements ActionListener
         q.answers.add(new Answer(Answer4Text, Answer4Correct));
         
         // Update database
-        DbAccess.StoreNewQuestion(q);
- 
+        int newId = DbAccess.StoreNewQuestion(q);
+        
+        if (newId > 0)
+        {
+            //SUCCESS
+            q.dbId = newId;
+            
+            // Message box pop up to say please select correct answer
+            JOptionPane.showMessageDialog(null,"Your Question has been submitted.",
+                                    "Question Submitted",JOptionPane.WARNING_MESSAGE);
+            
+            // Set Values
+            QuestionTxt_txtbx.setText("");
+            Answer1_txtbx.setText("");
+            Answer2_txtbx.setText("");
+            Answer3_txtbx.setText("");
+            Answer4_txtbx.setText("");
+            
+            Answer1Correct = false;
+            Answer2Correct = false;
+            Answer3Correct = false;
+            Answer4Correct = false;
+            
+        }
+        else
+        {
+            //FAIL
+            JOptionPane.showMessageDialog(null,"Unable to add question, please check text fields."
+                                        ,"Error",JOptionPane.WARNING_MESSAGE);
+        } 
     }
     /**
      * This method is called from within the constructor to initialize the form.
