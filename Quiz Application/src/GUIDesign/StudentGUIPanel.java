@@ -16,10 +16,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/**
- *
- * @author User
- */
 public class StudentGUIPanel extends JPanel {
     private JButton QuizScreen;
     private JButton Results;
@@ -42,8 +38,9 @@ public class StudentGUIPanel extends JPanel {
         add(Results);
         add(Box.createRigidArea(new Dimension(5,400)));
         add(Exit);
+        
                
-        ActionListener actionListener2 = new ActionListener() {
+        ActionListener QuizScreenListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 GUI.removePanel();
@@ -51,10 +48,9 @@ public class StudentGUIPanel extends JPanel {
             }
         };
      
-      
-       
-        ActionListener actionListener3;
-        actionListener3 = new ActionListener() {
+             
+        ActionListener ResultsListener;
+        ResultsListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 GUI.removePanel();
@@ -63,21 +59,18 @@ public class StudentGUIPanel extends JPanel {
             }
         };
         
-        ActionListener actionListener4 = new ActionListener() {
+        
+        ActionListener ExitListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               mainFrame.dispose();
+                mainFrame.dispose();
             }
         };
     
-      
-      
-      //log_in.addActionListener(actionListener1);
-      QuizScreen.addActionListener(actionListener2);
-      Results.addActionListener(actionListener3);
-      Exit.addActionListener(actionListener4);
+            
+        //log_in.addActionListener(actionListener1);
+        QuizScreen.addActionListener(QuizScreenListener);
+        Results.addActionListener(ResultsListener);
+        Exit.addActionListener(ExitListener);
     }
-    
-    
-
 }
