@@ -50,7 +50,7 @@ public class CreateQuestion extends javax.swing.JPanel implements ActionListener
             if(Answer1Correct || Answer2Correct || Answer3Correct || Answer4Correct)
             {
                 //BUTTON CODE HERE
-                this.CreateQuestion();
+                this.createQuestion();
 
             }
             else
@@ -65,7 +65,7 @@ public class CreateQuestion extends javax.swing.JPanel implements ActionListener
         
     }
     
-    public void CreateQuestion()
+    public void createQuestion()
     {
         
         // Set Values

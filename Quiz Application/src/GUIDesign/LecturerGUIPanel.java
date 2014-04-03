@@ -6,9 +6,8 @@
 
 package GUIDesign;
 
-import static GUIDesign.GUI.MFrame;
+import static GUIDesign.GUI.mainFrame;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +21,7 @@ import javax.swing.JPanel;
  * @author User
  */
 public class LecturerGUIPanel extends JPanel {
+    
     private JButton CreateQuestionButton;
     private JButton ViewStatsButton;
     private JButton Exit;
@@ -29,10 +29,10 @@ public class LecturerGUIPanel extends JPanel {
     LecturerGUIPanel(){
         setBackground(Color.WHITE);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        
+
         /*
-         *Sets up Buttons
-         */
+        *Sets up Buttons
+        */
         CreateQuestionButton = new JButton("Create Question");
         ViewStatsButton = new JButton("View Statistics");
         Exit= new JButton("Exit");
@@ -43,8 +43,9 @@ public class LecturerGUIPanel extends JPanel {
         add(ViewStatsButton);
         add(Box.createRigidArea(new Dimension(5,400)));
         add(Exit);
-               
-        ActionListener actionListener2 = new ActionListener() {
+        
+
+        ActionListener CreateQuestionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 GUI.removePanel();
@@ -53,30 +54,26 @@ public class LecturerGUIPanel extends JPanel {
         };
      
       
-       
-        ActionListener actionListener3 = new ActionListener() {
+        ActionListener ViewStatsListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               GUI.removePanel();
-               GUI.loadPanel(new Results.ResultPanel(100, 321));
+                GUI.removePanel();
+                GUI.loadPanel(new Results.ResultPanel(100, 321));
             }
         };
         
-        ActionListener actionListener4 = new ActionListener() {
+        
+        ActionListener ExitListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               MFrame.dispose();
+               mainFrame.dispose();
             }
         };
-    
+          
       
-      
-      //log_in.addActionListener(actionListener1);
-      CreateQuestionButton.addActionListener(actionListener2);
-      ViewStatsButton.addActionListener(actionListener3);
-      Exit.addActionListener(actionListener4);
+        //log_in.addActionListener(actionListener1);
+        CreateQuestionButton.addActionListener(CreateQuestionListener);
+        ViewStatsButton.addActionListener(ViewStatsListener);
+        Exit.addActionListener(ExitListener);
     }
-    
-    
-
 }
