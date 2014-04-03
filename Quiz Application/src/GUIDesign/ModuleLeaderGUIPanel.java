@@ -6,7 +6,7 @@
 
 package GUIDesign;
 
-import static GUIDesign.GUI.MFrame;
+import static GUIDesign.GUI.mainFrame;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -52,7 +52,7 @@ public class ModuleLeaderGUIPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(5,400)));
         add(Exit);
                
-        ActionListener actionListener2 = new ActionListener() {
+        ActionListener CreateQuestionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 GUI.removePanel();
@@ -61,8 +61,7 @@ public class ModuleLeaderGUIPanel extends JPanel {
         };
      
       
-       
-        ActionListener actionListener3 = new ActionListener() {
+        ActionListener ViewStatsListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                GUI.removePanel();
@@ -70,37 +69,38 @@ public class ModuleLeaderGUIPanel extends JPanel {
             }
         };
         
-        ActionListener actionListener4 = new ActionListener() {
+        
+        ActionListener ValidateQuestionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               MFrame.dispose();
-            }
-        };
-     ActionListener actionListener5 = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-               GUI.removePanel();
+                GUI.removePanel();
                 GUI.loadPanel(new Question.ValidateQuestion());
             }
         };
-     ActionListener actionListener6 = new ActionListener() {
-         @Override
+     
+     
+        ActionListener CreateQuizListener6 = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent actionEvent) {
-               GUI.removePanel();
+                GUI.removePanel();
                 GUI.loadPanel(new QuizGeneration.QuizGenerationForm());
             }
-     };
+        };
     
       
+        ActionListener ExitListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                mainFrame.dispose();
+            }
+        };
+        
       
-      //log_in.addActionListener(actionListener1);
-      CreateQuestionButton.addActionListener(actionListener2);
-      ViewStatsButton.addActionListener(actionListener3);
-      ValidateQuestionButton.addActionListener(actionListener5);
-      CreateQuizButton.addActionListener(actionListener6);
-      Exit.addActionListener(actionListener4);
+        //log_in.addActionListener(actionListener1);
+        CreateQuestionButton.addActionListener(CreateQuestionListener);
+        ViewStatsButton.addActionListener(ViewStatsListener);
+        ValidateQuestionButton.addActionListener(ValidateQuestionListener);
+        CreateQuizButton.addActionListener(CreateQuizListener6);
+        Exit.addActionListener(ExitListener);
     }
-    
-    
-
 }

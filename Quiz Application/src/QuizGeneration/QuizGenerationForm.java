@@ -9,14 +9,24 @@ package QuizGeneration;
 import Helper.DbAccess;
 import QuizApp.Core.Question;
 import QuizApp.Core.Quiz;
+
+import java.awt.Toolkit;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.util.List;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.ActionEvent;
+import java.awt.BorderLayout;
+
+import javax.swing.*;
+import javax.swing.event.*;
 /**
  *
  * @author dean
  */
+
+	
 public class QuizGenerationForm extends javax.swing.JPanel implements ActionListener 
 {
     private Boolean ShowPracticeQuestion = false;
@@ -24,6 +34,9 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
     private Boolean TimeAllotted = false;
     private String TitleEntry;
     private int TimeAllottedField;
+    private JLabel status;
+    
+    
     
 
     /**
@@ -32,9 +45,11 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
     public QuizGenerationForm() {
         initComponents();
         
-        Quit_button.addActionListener( this );
-        RandomGeneration_button.addActionListener( this );
-        TakeQuiz_button.addActionListener( this );
+        //Quit_button.addActionListener( this );
+       
+        //TakeQuiz_button.addActionListener( this );
+        TimeAllotted_chkbox.addActionListener( this );
+        
 
     }
     public void GenerateQuiz()
@@ -43,12 +58,21 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
        Quiz newQuiz = new Quiz(TitleEntry);
        newQuiz.navigationEnabled = NavigationEnabled_chkbox.isSelected();
        newQuiz.showPracticeQuestion = ShowPracticeQuestion_chkbox.isSelected();
-       int timeLimit = Integer.parseInt(TimeAllottedField_text.getText());
-       newQuiz.timeLimit = timeLimit;
+       String enteredTime = TimeAllottedField_text.getText();
+       if (enteredTime.equals(""))
+       {
+           newQuiz.timeLimit = 0;
+       }
+       else
+       {
+           newQuiz.timeLimit = Integer.parseInt(enteredTime);
+       }
        newQuiz.randomiseQuestions = true;
        newQuiz.timeOutBehaviour = 1;
        newQuiz.quizDBId = DbAccess.CreateQuiz(newQuiz);
+       
        List<Question> allValidatedQuestions = DbAccess.getAllQuestions(true);
+       
        for (Question q : allValidatedQuestions)
        {
            DbAccess.ToggleQuizQuestionLink(newQuiz.quizDBId, q.dbId, true);
@@ -76,7 +100,9 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
         ShowPracticeQuestion_chkbox = new javax.swing.JCheckBox();
         NavigationEnabled_chkbox = new javax.swing.JCheckBox();
         TimeAllotted_chkbox = new javax.swing.JCheckBox();
+        
         TimeAllottedField_text = new javax.swing.JTextField();
+        TimeAllottedField_text.setEditable(false);
         TitleEntry_textbox = new javax.swing.JTextField();
 
         QuizTitle.setText("Quiz Generation Menu");
@@ -85,6 +111,11 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
         RandomGeneration_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RandomGeneration_buttonActionPerformed(evt);
+            }
+        });
+        TimeAllotted_chkbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TimeAllotted_chkboxActionPerformed(evt);
             }
         });
 
@@ -159,10 +190,29 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
                 .addGap(31, 31, 31))
         );
     }// </editor-fold>                        
+    private void TimeAllotted_chkboxActionPerformed(java.awt.event.ActionEvent evt) {  
+        
+			if(TimeAllottedField_text.isEditable()){
+				TimeAllottedField_text.setEditable(false);
+				status.setText("Field is No Longer Editable");
+			} else if(!TimeAllottedField_text.isEditable()){
+				TimeAllottedField_text.setEditable(true);
+                    }
+		
+    }
 
     private void RandomGeneration_buttonActionPerformed(java.awt.event.ActionEvent evt) {                                                        
-        this.GenerateQuiz();
-    }                                                       
+        //this.GenerateQuiz();
+
+				if(JOptionPane.showConfirmDialog(null, "Are you sure?")==0){
+					GenerateQuiz();
+					status.setText("Quiz generated");
+				}
+			}
+				
+     
+    
+    
 
     private void ShowPracticeQuestion_chkboxActionPerformed(java.awt.event.ActionEvent evt) {                                                            
         // TODO add your handling code here:
@@ -183,6 +233,7 @@ public class QuizGenerationForm extends javax.swing.JPanel implements ActionList
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      
+        
     }
 }
